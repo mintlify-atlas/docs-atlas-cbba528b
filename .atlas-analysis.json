@@ -1,0 +1,89 @@
+{
+  "projectType": "general",
+  "projectName": "YangleyLand Configs",
+  "projectDescription": "Personal desktop configuration files for Neovim, Tmux, Alacritty, and AeroSpace",
+  "theme": "aspen",
+  "primaryColor": "#7aa2f7",
+  "lightColor": "#c0caf5",
+  "darkColor": "#1a1b26",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": [
+          "introduction",
+          "installation"
+        ]
+      },
+      {
+        "group": "Configurations",
+        "pages": [
+          "configs/neovim",
+          "configs/tmux",
+          "configs/alacritty",
+          "configs/aerospace"
+        ]
+      },
+      {
+        "group": "Neovim Setup",
+        "pages": [
+          "neovim/plugins",
+          "neovim/keybindings",
+          "neovim/colorschemes",
+          "neovim/customization"
+        ]
+      },
+      {
+        "group": "Terminal & Shell",
+        "pages": [
+          "terminal/alacritty-config",
+          "terminal/themes",
+          "terminal/fonts"
+        ]
+      },
+      {
+        "group": "Window Management",
+        "pages": [
+          "window-management/aerospace-setup",
+          "window-management/keybindings",
+          "window-management/workspaces"
+        ]
+      },
+      {
+        "group": "Tmux Configuration",
+        "pages": [
+          "tmux/basic-config",
+          "tmux/plugins",
+          "tmux/keybindings"
+        ]
+      },
+      {
+        "group": "Customization",
+        "pages": [
+          "customization/color-schemes",
+          "customization/fonts",
+          "customization/personalization"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "LazyVim-based Neovim configuration with custom plugins",
+    "Alacritty terminal with 150+ theme presets",
+    "Tmux with Catppuccin theme and custom keybindings",
+    "AeroSpace tiling window manager for macOS",
+    "Vim-style keybindings across all tools",
+    "Unified visual theme and color schemes"
+  ],
+  "publicApiSurface": [
+    "nvim/init.lua - Neovim entry point",
+    "nvim/lua/config/lazy.lua - LazyVim plugin manager setup",
+    "nvim/lua/config/options.lua - Neovim options",
+    "nvim/lua/config/keymaps.lua - Custom keybindings",
+    "nvim/lua/plugins/*.lua - Plugin configurations",
+    "alacritty/alacritty.toml - Terminal configuration",
+    "alacritty/themes/themes/*.toml - 150+ color theme presets",
+    "tmux/tmux.conf - Tmux configuration",
+    "aerospace/aerospace.toml - Window manager configuration"
+  ]
+}
