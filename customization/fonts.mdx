@@ -1,0 +1,355 @@
+---
+title: Font Configuration
+description: Customize fonts across your terminal and editor for the perfect development experience
+---
+
+This guide covers font configuration for Alacritty terminal and how fonts affect Neovim within the terminal.
+
+## Current Font Setup
+
+The configuration uses **0xProto Nerd Font Mono** at 16pt size with special padding for visual comfort.
+
+<Note>
+  Nerd Fonts include programming ligatures and thousands of icons/glyphs used by terminal tools and Neovim plugins.
+</Note>
+
+## Alacritty Font Configuration
+
+Fonts are configured in `alacritty/alacritty.toml:15`.
+
+### Current Settings
+
+```toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+```
+
+Additional window settings that complement the font:
+
+```toml
+[window]
+padding.x = 10
+padding.y = 10
+opacity = 0.8
+blur = true
+```
+
+### Changing the Font Family
+
+<Steps>
+  <Step title="Choose a Nerd Font">
+    Visit [Nerd Fonts](https://www.nerdfonts.com/) and download a font. Popular choices:
+    
+    - **JetBrains Mono Nerd Font** - Clean and readable
+    - **Fira Code Nerd Font** - Great ligatures
+    - **Hack Nerd Font** - Designed for source code
+    - **Meslo Nerd Font** - Based on Menlo/Monaco
+    - **Iosevka Nerd Font** - Narrow and space-efficient
+    - **0xProto Nerd Font** (current) - Modern monospace
+  </Step>
+  
+  <Step title="Install the font">
+    <Tabs>
+      <Tab title="macOS">
+        ```bash
+        # Using Homebrew
+        brew tap homebrew/cask-fonts
+        brew install font-jetbrains-mono-nerd-font
+        
+        # Or download from nerdfonts.com and install via Font Book
+        ```
+      </Tab>
+      
+      <Tab title="Linux">
+        ```bash
+        # Download and extract to fonts directory
+        mkdir -p ~/.local/share/fonts
+        cd ~/.local/share/fonts
+        
+        # Download your chosen font
+        wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip
+        unzip JetBrainsMono.zip
+        
+        # Refresh font cache
+        fc-cache -fv
+        ```
+      </Tab>
+      
+      <Tab title="Windows">
+        Download the font from [Nerd Fonts releases](https://github.com/ryanoasis/nerd-fonts/releases) and install by right-clicking the `.ttf` files and selecting "Install".
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Update Alacritty configuration">
+    Edit `alacritty/alacritty.toml:15`:
+    
+    ```toml
+    [font]
+    normal.family = "JetBrainsMono Nerd Font Mono"
+    size = 16
+    ```
+  </Step>
+  
+  <Step title="Verify font name">
+    Check the exact font name installed on your system:
+    
+    <Tabs>
+      <Tab title="macOS">
+        ```bash
+        # List all installed fonts
+        fc-list | grep -i jetbrains
+        ```
+      </Tab>
+      
+      <Tab title="Linux">
+        ```bash
+        fc-list | grep -i jetbrains
+        ```
+      </Tab>
+    </Tabs>
+    
+    Use the exact family name shown in the output.
+  </Step>
+  
+  <Step title="Reload Alacritty">
+    Save the file. Alacritty will automatically reload and apply the new font.
+  </Step>
+</Steps>
+
+<Tip>
+  If the font doesn't appear correctly, try variations like:
+  - `JetBrainsMono Nerd Font`
+  - `JetBrainsMono Nerd Font Mono`
+  - `JetBrainsMonoNL Nerd Font Mono`
+</Tip>
+
+### Adjusting Font Size
+
+<Steps>
+  <Step title="Edit the size parameter">
+    In `alacritty/alacritty.toml:19`, change the size value:
+    
+    ```toml
+    [font]
+    normal.family = "0xProto Nerd Font Mono"
+    size = 14  # Smaller
+    # or
+    size = 18  # Larger
+    ```
+  </Step>
+  
+  <Step title="Save and review">
+    Alacritty will automatically reload. Adjust until comfortable.
+  </Step>
+</Steps>
+
+<Note>
+  Common sizes:
+  - **12-14pt**: More content on screen, good for large monitors
+  - **16pt**: Default, balanced
+  - **18-20pt**: Easier on the eyes, better for presentations
+</Note>
+
+### Advanced Font Configuration
+
+You can configure different font styles for bold, italic, and bold-italic text:
+
+```toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+normal.style = "Regular"
+
+bold.family = "0xProto Nerd Font Mono"
+bold.style = "Bold"
+
+italic.family = "0xProto Nerd Font Mono"
+italic.style = "Italic"
+
+bold_italic.family = "0xProto Nerd Font Mono"
+bold_italic.style = "Bold Italic"
+
+size = 16
+```
+
+### Font Rendering Options
+
+Improve font rendering with these additional settings:
+
+```toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+
+# Font offset and spacing
+offset.x = 0
+offset.y = 0
+glyph_offset.x = 0
+glyph_offset.y = 0
+
+# Character spacing
+[font.builtin_box_drawing]
+enabled = true
+```
+
+## Neovim and Fonts
+
+Neovim inherits font settings from the terminal (Alacritty), so it automatically uses whatever font you configure in Alacritty.
+
+### GUI-specific Font Settings
+
+If you use a Neovim GUI (like Neovide or VimR), you'll need separate font configuration.
+
+For reference, you could add to `nvim/lua/config/options.lua:1`:
+
+```lua
+-- These only work in GUI Neovim clients, not terminal
+if vim.g.neovide then
+  vim.o.guifont = "0xProto Nerd Font Mono:h16"
+  vim.g.neovide_scale_factor = 1.0
+end
+```
+
+<Note>
+  When using Neovim in Alacritty, font configuration is entirely controlled by Alacritty's settings.
+</Note>
+
+### Icons and Glyphs
+
+Nerd Fonts provide the icons you see in:
+
+- **File explorers** (neo-tree, nvim-tree)
+- **Status line** (lualine)
+- **Git signs**
+- **LSP diagnostics**
+- **Bufferline tabs**
+
+If icons appear as boxes or question marks:
+
+<Steps>
+  <Step title="Verify Nerd Font installation">
+    Ensure you're using a font with "Nerd Font" in the name:
+    
+    ```bash
+    fc-list | grep -i "nerd font"
+    ```
+  </Step>
+  
+  <Step title="Check Alacritty font setting">
+    The font family must include "Nerd Font":
+    
+    ```toml
+    normal.family = "JetBrainsMono Nerd Font Mono"  # Correct
+    # NOT: normal.family = "JetBrains Mono"  # Wrong - missing "Nerd Font"
+    ```
+  </Step>
+  
+  <Step title="Test icon rendering">
+    Run this in terminal:
+    
+    ```bash
+    echo -e "\ue0b0 \uf418 \uf09b \ue5ff \uf113"
+    ```
+    
+    You should see various icons, not boxes.
+  </Step>
+</Steps>
+
+## Font Ligatures
+
+Many programming fonts support ligatures (combining characters like `=>`, `!=`, `>=` into single glyphs).
+
+<Tabs>
+  <Tab title="With Ligatures">
+    Fonts that support ligatures:
+    - Fira Code Nerd Font
+    - JetBrains Mono Nerd Font
+    - Cascadia Code Nerd Font
+    - Iosevka Nerd Font
+    
+    Ligatures are automatically enabled if the font supports them.
+  </Tab>
+  
+  <Tab title="Without Ligatures">
+    Fonts without ligatures (traditional monospace):
+    - Hack Nerd Font
+    - Inconsolata Nerd Font
+    - Source Code Pro Nerd Font
+    - 0xProto Nerd Font (current)
+    
+    Characters remain separate: `=>` appears as two characters.
+  </Tab>
+</Tabs>
+
+<Tip>
+  Try both styles to see which you prefer. Some developers love ligatures for readability, others prefer seeing the actual characters.
+</Tip>
+
+## Troubleshooting
+
+### Font Not Found
+
+If Alacritty shows an error about missing font:
+
+1. Verify installation: `fc-list | grep -i "font-name"`
+2. Try the exact name from `fc-list` output
+3. Restart Alacritty completely (not just reload config)
+4. On macOS, try Font Book to verify installation
+
+### Icons Not Displaying
+
+If you see boxes (□) instead of icons:
+
+1. **Must use a Nerd Font** - regular fonts don't have these icons
+2. Font name must include "Nerd Font"
+3. Download from [nerdfonts.com](https://www.nerdfonts.com/)
+4. Refresh font cache after installation
+
+### Font Too Small/Large
+
+Quick size adjustment:
+
+```toml
+[font]
+size = 16  # Adjust this value
+```
+
+You can also use Alacritty's keyboard shortcuts:
+- `Cmd/Ctrl` + `+`: Increase font size
+- `Cmd/Ctrl` + `-`: Decrease font size  
+- `Cmd/Ctrl` + `0`: Reset to configured size
+
+<Note>
+  Keyboard shortcuts only affect the current session. To make permanent changes, edit the config file.
+</Note>
+
+## Recommended Font Combinations
+
+Based on different preferences:
+
+<Tabs>
+  <Tab title="Maximum Readability">
+    **Font**: JetBrains Mono Nerd Font  
+    **Size**: 16-18pt  
+    **Features**: Clear, excellent ligatures, designed for long coding sessions
+  </Tab>
+  
+  <Tab title="Space Efficient">
+    **Font**: Iosevka Nerd Font  
+    **Size**: 14-16pt  
+    **Features**: Narrow glyphs, fit more code on screen
+  </Tab>
+  
+  <Tab title="Classic Monospace">
+    **Font**: Hack Nerd Font  
+    **Size**: 16pt  
+    **Features**: Traditional monospace feel, no ligatures
+  </Tab>
+  
+  <Tab title="Modern & Clean">
+    **Font**: 0xProto Nerd Font Mono (current)  
+    **Size**: 16pt  
+    **Features**: Modern design, clean lines, good for long sessions
+  </Tab>
+</Tabs>

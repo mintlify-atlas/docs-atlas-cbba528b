@@ -1,0 +1,288 @@
+---
+title: Color Schemes
+description: Learn how to customize color schemes and themes across Neovim, Alacritty, and Tmux
+---
+
+This guide covers how to change and customize color schemes across all the tools in your development environment.
+
+## Neovim Color Schemes
+
+The configuration uses LazyVim with multiple color schemes available. The current theme is set to **onedark**.
+
+### Available Themes
+
+The following themes are pre-installed in `nvim/lua/plugins/colorscheme.lua:1`:
+
+- **onedark** (currently active)
+- **kanagawa**
+- **papercolor-theme**
+- **gruvbox**
+- **rose-pine**
+- **tokyodark**
+- **everforest**
+
+### Changing the Neovim Theme
+
+<Steps>
+  <Step title="Open the colorscheme configuration">
+    Edit the file `nvim/lua/plugins/colorscheme.lua:18`:
+    
+    ```lua
+    {
+      "LazyVim/LazyVim",
+      opts = {
+        colorscheme = "onedark",
+      },
+    }
+    ```
+  </Step>
+  
+  <Step title="Change the colorscheme value">
+    Replace `"onedark"` with any of the available themes:
+    
+    ```lua
+    colorscheme = "gruvbox"  -- or kanagawa, rose-pine, etc.
+    ```
+  </Step>
+  
+  <Step title="Restart Neovim">
+    Close and reopen Neovim to apply the new theme. LazyVim will automatically load the new colorscheme.
+  </Step>
+</Steps>
+
+### Adding New Themes
+
+To add a new theme to Neovim:
+
+<Steps>
+  <Step title="Add the theme plugin">
+    In `nvim/lua/plugins/colorscheme.lua:1`, add a new plugin entry:
+    
+    ```lua
+    return {
+      { "rebelot/kanagawa.nvim" },
+      { "NLKNguyen/papercolor-theme" },
+      { "catppuccin/nvim", name = "catppuccin" },  -- New theme
+      -- ... other themes
+    }
+    ```
+  </Step>
+  
+  <Step title="Set as active theme (optional)">
+    Update the LazyVim opts to use the new theme:
+    
+    ```lua
+    {
+      "LazyVim/LazyVim",
+      opts = {
+        colorscheme = "catppuccin",
+      },
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Neovim">
+    Restart Neovim. Lazy.nvim will automatically download and install the new theme.
+  </Step>
+</Steps>
+
+<Tip>
+  You can preview themes without restarting by running `:colorscheme theme-name` in Neovim command mode.
+</Tip>
+
+### Customizing Theme Colors
+
+You can override specific highlight groups in any theme. For example, the current configuration customizes the Visual selection color in onedark (`nvim/lua/plugins/colorscheme.lua:10`):
+
+```lua
+{
+  "navarasu/onedark.nvim",
+  opts = {
+    highlights = {
+      Visual = { bg = "#ffff00" },  -- Yellow background for visual mode
+    },
+  },
+}
+```
+
+## Alacritty Color Schemes
+
+Alacritty uses theme files located in the `alacritty/themes/themes/` directory. The current theme is **coolnight**.
+
+### Available Themes
+
+The configuration includes 100+ themes, including:
+
+<Tabs>
+  <Tab title="Popular Dark Themes">
+    - `coolnight.toml` (currently active)
+    - `tokyo_night.toml`
+    - `gruvbox_dark.toml`
+    - `nord.toml`
+    - `dracula.toml`
+    - `catppuccin_mocha.toml`
+    - `onedark.toml`
+    - `kanagawa_wave.toml`
+  </Tab>
+  
+  <Tab title="Popular Light Themes">
+    - `github_light.toml`
+    - `gruvbox_light.toml`
+    - `papercolor_light.toml`
+    - `solarized_light.toml`
+    - `rose_pine_dawn.toml`
+  </Tab>
+  
+  <Tab title="Material Themes">
+    - `material_theme.toml`
+    - `material_theme_mod.toml`
+  </Tab>
+</Tabs>
+
+### Changing the Alacritty Theme
+
+<Steps>
+  <Step title="Browse available themes">
+    List all available themes:
+    
+    ```bash
+    ls ~/.config/alacritty/themes/themes/
+    ```
+  </Step>
+  
+  <Step title="Edit the Alacritty configuration">
+    Open `alacritty/alacritty.toml:1` and modify the import line:
+    
+    ```toml
+    general.import = [
+        "~/.config/alacritty/themes/themes/coolnight.toml"
+    ]
+    ```
+  </Step>
+  
+  <Step title="Change to your preferred theme">
+    Replace `coolnight.toml` with any theme file:
+    
+    ```toml
+    general.import = [
+        "~/.config/alacritty/themes/themes/gruvbox_dark.toml"
+    ]
+    ```
+  </Step>
+  
+  <Step title="Save and reload">
+    Save the file. Alacritty will automatically reload the configuration and apply the new theme.
+  </Step>
+</Steps>
+
+<Note>
+  No restart required! Alacritty automatically reloads configuration changes.
+</Note>
+
+## Tmux Color Schemes
+
+Tmux uses the Catppuccin theme via TPM (Tmux Plugin Manager).
+
+### Current Theme
+
+The configuration uses `catppuccin-tmux` from the `dreamsofcode-io` repository (`tmux/tmux.conf:26`):
+
+```bash
+set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+```
+
+### Changing the Tmux Theme
+
+<Steps>
+  <Step title="Edit tmux configuration">
+    Open `tmux/tmux.conf:25` and locate the theme plugin lines:
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tpm'
+    set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+    # set -g @plugin 'catppuccin/tmux'
+    ```
+  </Step>
+  
+  <Step title="Switch to alternative theme">
+    Comment out the current theme and uncomment another:
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tpm'
+    # set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+    set -g @plugin 'catppuccin/tmux'
+    ```
+  </Step>
+  
+  <Step title="Install the new theme">
+    Inside tmux, press `Ctrl+Space` + `I` (capital i) to install the new plugin.
+  </Step>
+  
+  <Step title="Reload tmux configuration">
+    Press `Ctrl+Space` + `r` or run:
+    
+    ```bash
+    tmux source-file ~/.config/tmux/tmux.conf
+    ```
+  </Step>
+</Steps>
+
+### Adding Custom Tmux Themes
+
+To add a different theme plugin:
+
+<Steps>
+  <Step title="Find a theme plugin">
+    Search for tmux themes on GitHub (e.g., `nordtheme/tmux`, `dracula/tmux`).
+  </Step>
+  
+  <Step title="Add to configuration">
+    Add the plugin to `tmux/tmux.conf:25`:
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tpm'
+    set -g @plugin 'dracula/tmux'
+    ```
+  </Step>
+  
+  <Step title="Install and reload">
+    Press `Ctrl+Space` + `I` to install, then reload tmux.
+  </Step>
+</Steps>
+
+<Tip>
+  For a coordinated look, choose matching themes across all tools. For example:
+  - Neovim: `gruvbox`
+  - Alacritty: `gruvbox_dark.toml`
+  - Tmux: A gruvbox-compatible theme
+</Tip>
+
+## Theme Coordination Examples
+
+Here are some popular theme combinations:
+
+<Tabs>
+  <Tab title="Tokyo Night">
+    **Neovim**: `tokyodark` or import tokyo-night theme  
+    **Alacritty**: `tokyo_night.toml`  
+    **Tmux**: Keep catppuccin or find tokyo-night tmux theme
+  </Tab>
+  
+  <Tab title="Gruvbox">
+    **Neovim**: `gruvbox`  
+    **Alacritty**: `gruvbox_dark.toml`  
+    **Tmux**: Search for gruvbox tmux theme on GitHub
+  </Tab>
+  
+  <Tab title="Nord">
+    **Neovim**: Add nord theme plugin  
+    **Alacritty**: `nord.toml`  
+    **Tmux**: `arcticicestudio/nord-tmux`
+  </Tab>
+  
+  <Tab title="Catppuccin">
+    **Neovim**: Add catppuccin/nvim plugin  
+    **Alacritty**: `catppuccin_mocha.toml`  
+    **Tmux**: `catppuccin/tmux` (already commented in config)
+  </Tab>
+</Tabs>

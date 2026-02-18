@@ -1,0 +1,173 @@
+---
+title: Alacritty Configuration
+description: Complete guide to Alacritty terminal emulator configuration settings
+---
+
+## Overview
+
+Alacritty is a modern, GPU-accelerated terminal emulator written in Rust. This configuration provides a customized setup with enhanced visuals, fonts, and window behavior.
+
+## Main Configuration
+
+The primary configuration file is located at `~/.config/alacritty/alacritty.toml`.
+
+### Theme Import
+
+```toml alacritty.toml
+general.import = [
+    "~/.config/alacritty/themes/themes/coolnight.toml"
+]
+```
+
+<Tip>
+You can easily switch themes by changing the import path. See the [Themes](/terminal/themes) page for all 151 available themes.
+</Tip>
+
+### Environment Variables
+
+```toml alacritty.toml
+[env]
+TERM = "xterm-256color"
+```
+
+Sets the terminal type to support 256 colors, ensuring proper color rendering in terminal applications.
+
+## Window Settings
+
+### Padding
+
+```toml alacritty.toml
+[window]
+padding.x = 10
+padding.y = 10
+```
+
+Adds 10 pixels of padding on all sides for a more comfortable viewing experience.
+
+### Window Appearance
+
+```toml alacritty.toml
+decorations = "Buttonless"
+opacity = 0.8
+blur = true
+startup_mode = "Maximized"
+```
+
+<CardGroup cols={2}>
+  <Card title="Decorations" icon="window-minimize">
+    **Buttonless** mode removes title bar buttons for a cleaner look
+  </Card>
+  <Card title="Opacity" icon="droplet">
+    Set to **0.8** for 80% opacity with see-through effect
+  </Card>
+  <Card title="Blur" icon="eye-dropper">
+    **Enabled** to blur content behind transparent window
+  </Card>
+  <Card title="Startup Mode" icon="maximize">
+    Opens **Maximized** by default for full screen workflow
+  </Card>
+</CardGroup>
+
+<Note>
+The blur effect works best on macOS and requires a compositor on Linux (like picom or compton).
+</Note>
+
+## Font Configuration
+
+### Font Family
+
+```toml alacritty.toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+```
+
+**0xProto Nerd Font Mono** is used as the primary font, providing:
+- Excellent readability for code
+- Full Nerd Font icon support
+- Monospaced design perfect for terminal work
+- Professional appearance
+
+<Tip>
+Font size of **16** provides comfortable readability on most displays. Adjust based on your screen resolution and preferences.
+</Tip>
+
+For more details on font options and installation, see [Font Configuration](/terminal/fonts).
+
+## Configuration Structure
+
+```
+~/.config/alacritty/
+├── alacritty.toml          # Main configuration
+└── themes/
+    └── themes/
+        ├── coolnight.toml  # Currently active theme
+        ├── dracula.toml
+        ├── tokyo_night.toml
+        └── ... (151 total themes)
+```
+
+## Quick Customization
+
+### Change Theme
+
+1. Browse available themes in `~/.config/alacritty/themes/themes/`
+2. Update the import path in `alacritty.toml`:
+
+```toml
+general.import = [
+    "~/.config/alacritty/themes/themes/YOUR_THEME.toml"
+]
+```
+
+### Adjust Window Opacity
+
+```toml
+[window]
+opacity = 0.95  # More opaque
+opacity = 0.7   # More transparent
+```
+
+### Modify Font Size
+
+```toml
+[font]
+size = 14  # Smaller
+size = 18  # Larger
+```
+
+## Advanced Settings
+
+### Disable Blur (Better Performance)
+
+```toml
+[window]
+blur = false
+```
+
+### Full Window Decorations
+
+```toml
+[window]
+decorations = "Full"  # Show all title bar buttons
+```
+
+### Different Startup Modes
+
+```toml
+[window]
+startup_mode = "Windowed"    # Normal window
+startup_mode = "Fullscreen"  # Full screen
+startup_mode = "Maximized"   # Maximized (default)
+```
+
+## Related Pages
+
+<CardGroup cols={2}>
+  <Card title="Available Themes" icon="palette" href="/terminal/themes">
+    Explore 151 beautiful themes for Alacritty
+  </Card>
+  <Card title="Font Configuration" icon="font" href="/terminal/fonts">
+    Learn about font setup and Nerd Font icons
+  </Card>
+</CardGroup>

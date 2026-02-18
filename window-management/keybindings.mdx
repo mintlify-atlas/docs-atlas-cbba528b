@@ -1,0 +1,279 @@
+---
+title: 'Keybindings'
+description: 'Complete reference for AeroSpace window management keybindings'
+---
+
+# Keybindings Reference
+
+All keybindings use the `Alt` (Option) key as the primary modifier. Add `Shift` for move operations.
+
+## Quick Reference
+
+### Focus Navigation
+
+Move focus between windows using vim-style navigation:
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `Alt+H` | Focus left | Move focus to the window on the left |
+| `Alt+J` | Focus down | Move focus to the window below |
+| `Alt+K` | Focus up | Move focus to the window above |
+| `Alt+L` | Focus right | Move focus to the window on the right |
+
+### Window Movement
+
+Move windows between positions:
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `Alt+Shift+H` | Move left | Move current window to the left |
+| `Alt+Shift+J` | Move down | Move current window down |
+| `Alt+Shift+K` | Move up | Move current window up |
+| `Alt+Shift+L` | Move right | Move current window to the right |
+
+### Window Resizing
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `Alt+Shift+-` | Shrink | Decrease window size by 50 pixels |
+| `Alt+Shift+=` | Grow | Increase window size by 50 pixels |
+
+<Note>
+Resizing uses "smart" mode, which automatically determines whether to resize horizontally or vertically based on the current layout orientation.
+</Note>
+
+### Layout Management
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `Alt+/` | Toggle tiles layout | Cycle through horizontal and vertical tiles layouts |
+| `Alt+,` | Toggle accordion layout | Cycle through horizontal and vertical accordion layouts |
+
+<AccordionGroup>
+  <Accordion title="Tiles Layout">
+    The default layout where windows are arranged in a tree structure. Windows can be split horizontally or vertically, creating a flexible tiling system.
+    
+    - **Horizontal**: Windows are arranged side-by-side
+    - **Vertical**: Windows are stacked top-to-bottom
+  </Accordion>
+
+  <Accordion title="Accordion Layout">
+    A layout style where one window is focused and others are minimized with padding (30 pixels by default). Useful for focusing on a single window while keeping others visible.
+    
+    - **Horizontal**: Accordion effect arranged horizontally
+    - **Vertical**: Accordion effect arranged vertically
+  </Accordion>
+</AccordionGroup>
+
+## Workspace Navigation
+
+### Number Workspaces
+
+Switch to numbered workspaces (1-9):
+
+| Keybinding | Workspace |
+|------------|----------|
+| `Alt+1` | Workspace 1 |
+| `Alt+2` | Workspace 2 |
+| `Alt+3` | Workspace 3 |
+| `Alt+4` | Workspace 4 |
+| `Alt+5` | Workspace 5 |
+| `Alt+6` | Workspace 6 |
+| `Alt+7` | Workspace 7 |
+| `Alt+8` | Workspace 8 |
+| `Alt+9` | Workspace 9 |
+
+### Letter Workspaces
+
+Switch to letter workspaces (A-Z, excluding H, J, K, L):
+
+<Tabs>
+  <Tab title="A-G">
+    | Keybinding | Workspace |
+    |------------|----------|
+    | `Alt+A` | Workspace A |
+    | `Alt+B` | Workspace B |
+    | `Alt+C` | Workspace C |
+    | `Alt+D` | Workspace D |
+    | `Alt+E` | Workspace E |
+    | `Alt+F` | Workspace F |
+    | `Alt+G` | Workspace G |
+  </Tab>
+  
+  <Tab title="I-P">
+    | Keybinding | Workspace |
+    |------------|----------|
+    | `Alt+I` | Workspace I |
+    | `Alt+M` | Workspace M |
+    | `Alt+N` | Workspace N |
+    | `Alt+O` | Workspace O |
+    | `Alt+P` | Workspace P |
+  </Tab>
+  
+  <Tab title="Q-Z">
+    | Keybinding | Workspace |
+    |------------|----------|
+    | `Alt+Q` | Workspace Q |
+    | `Alt+R` | Workspace R |
+    | `Alt+S` | Workspace S |
+    | `Alt+T` | Workspace T |
+    | `Alt+U` | Workspace U |
+    | `Alt+V` | Workspace V |
+    | `Alt+W` | Workspace W |
+    | `Alt+X` | Workspace X |
+    | `Alt+Y` | Workspace Y |
+    | `Alt+Z` | Workspace Z |
+  </Tab>
+</Tabs>
+
+<Note>
+Workspaces H, J, K, and L are not available because those keys are used for focus navigation.
+</Note>
+
+### Quick Workspace Actions
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `Alt+Tab` | Back and forth | Switch to previously focused workspace |
+| `Alt+Shift+Tab` | Move workspace | Move current workspace to next monitor (wraps around) |
+
+## Moving Windows to Workspaces
+
+Add `Shift` to workspace keybindings to move the current window to that workspace.
+
+### Move to Number Workspaces
+
+| Keybinding | Action |
+|------------|--------|
+| `Alt+Shift+1` | Move window to workspace 1 |
+| `Alt+Shift+2` | Move window to workspace 2 |
+| `Alt+Shift+3` | Move window to workspace 3 |
+| `Alt+Shift+4` | Move window to workspace 4 |
+| `Alt+Shift+5` | Move window to workspace 5 |
+| `Alt+Shift+6` | Move window to workspace 6 |
+| `Alt+Shift+7` | Move window to workspace 7 |
+| `Alt+Shift+8` | Move window to workspace 8 |
+| `Alt+Shift+9` | Move window to workspace 9 |
+
+### Move to Letter Workspaces
+
+<Tabs>
+  <Tab title="A-G">
+    | Keybinding | Action |
+    |------------|--------|
+    | `Alt+Shift+A` | Move to workspace A |
+    | `Alt+Shift+B` | Move to workspace B |
+    | `Alt+Shift+C` | Move to workspace C |
+    | `Alt+Shift+D` | Move to workspace D |
+    | `Alt+Shift+E` | Move to workspace E |
+    | `Alt+Shift+F` | Move to workspace F |
+    | `Alt+Shift+G` | Move to workspace G |
+  </Tab>
+  
+  <Tab title="I-P">
+    | Keybinding | Action |
+    |------------|--------|
+    | `Alt+Shift+I` | Move to workspace I |
+    | `Alt+Shift+M` | Move to workspace M |
+    | `Alt+Shift+N` | Move to workspace N |
+    | `Alt+Shift+O` | Move to workspace O |
+    | `Alt+Shift+P` | Move to workspace P |
+  </Tab>
+  
+  <Tab title="Q-Z">
+    | Keybinding | Action |
+    |------------|--------|
+    | `Alt+Shift+Q` | Move to workspace Q |
+    | `Alt+Shift+R` | Move to workspace R |
+    | `Alt+Shift+S` | Move to workspace S |
+    | `Alt+Shift+T` | Move to workspace T |
+    | `Alt+Shift+U` | Move to workspace U |
+    | `Alt+Shift+V` | Move to workspace V |
+    | `Alt+Shift+W` | Move to workspace W |
+    | `Alt+Shift+X` | Move to workspace X |
+    | `Alt+Shift+Y` | Move to workspace Y |
+    | `Alt+Shift+Z` | Move to workspace Z |
+  </Tab>
+</Tabs>
+
+## Service Mode
+
+Press `Alt+Shift+;` to enter service mode for advanced operations.
+
+### Service Mode Commands
+
+<AccordionGroup>
+  <Accordion title="Configuration Management">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `Esc` | Reload config | Reloads `~/.aerospace.toml` and exits service mode |
+  </Accordion>
+
+  <Accordion title="Layout Operations">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `r` | Reset layout | Flattens workspace tree to reset layout structure |
+    | `f` | Toggle floating | Switches between floating and tiling layout modes |
+  </Accordion>
+
+  <Accordion title="Window Management">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `Backspace` | Close others | Closes all windows except the current one |
+  </Accordion>
+
+  <Accordion title="Join Windows">
+    Join the current window with an adjacent window:
+    
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `Alt+Shift+H` | Join left | Join with window on the left |
+    | `Alt+Shift+J` | Join down | Join with window below |
+    | `Alt+Shift+K` | Join up | Join with window above |
+    | `Alt+Shift+L` | Join right | Join with window on the right |
+    
+    All join commands automatically exit service mode after execution.
+  </Accordion>
+</AccordionGroup>
+
+## Common Workflows
+
+<CardGroup cols={2}>
+  <Card title="Split Window Horizontally">
+    1. Focus the window to split
+    2. Press `Alt+/` until horizontal layout
+    3. Open new window or move existing window
+  </Card>
+  
+  <Card title="Split Window Vertically">
+    1. Focus the window to split
+    2. Press `Alt+/` until vertical layout
+    3. Open new window or move existing window
+  </Card>
+  
+  <Card title="Move Window to Another Workspace">
+    1. Focus the window to move
+    2. Press `Alt+Shift+[workspace]`
+    3. Example: `Alt+Shift+2` moves to workspace 2
+  </Card>
+  
+  <Card title="Swap Windows">
+    1. Focus first window
+    2. Use `Alt+Shift+H/J/K/L` to move it
+    3. Windows will swap positions
+  </Card>
+</CardGroup>
+
+## Tips
+
+<Tip>
+Use `Alt+Tab` to quickly switch between your two most recent workspaces, similar to Alt+Tab window switching in traditional desktop environments.
+</Tip>
+
+<Tip>
+If your layout gets messy, press `Alt+Shift+;` then `r` to reset the workspace tree and start fresh.
+</Tip>
+
+<Tip>
+The smart resize (`Alt+Shift+-` and `Alt+Shift+=`) automatically determines the best direction to resize based on your current layout orientation.
+</Tip>

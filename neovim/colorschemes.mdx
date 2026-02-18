@@ -1,0 +1,424 @@
+---
+title: "Colorschemes"
+description: "Available colorschemes and theme configuration"
+---
+
+This Neovim setup includes multiple carefully selected colorschemes with **OneDark** configured as the default theme.
+
+## Active Colorscheme
+
+<Card title="OneDark" icon="moon" color="#e5c07b">
+  **Repository**: [navarasu/onedark.nvim](https://github.com/navarasu/onedark.nvim)
+  
+  A dark and elegant theme with custom visual selection highlighting.
+</Card>
+
+```lua ~/workspace/source/nvim/lua/plugins/colorscheme.lua
+{
+  "navarasu/onedark.nvim",
+  opts = {
+    highlights = {
+      Visual = { bg = "#ffff00" },
+    },
+  },
+},
+{
+  "LazyVim/LazyVim",
+  opts = {
+    colorscheme = "onedark",
+  },
+}
+```
+
+<Note>
+  The Visual mode uses a bright yellow background (`#ffff00`) for enhanced visibility when selecting text.
+</Note>
+
+---
+
+## Available Colorschemes
+
+All colorschemes are pre-installed and ready to use. Switch between them instantly.
+
+<CardGroup cols={2}>
+
+<Card title="Kanagawa" icon="mountain" color="#7e9cd8">
+  **Repository**: rebelot/kanagawa.nvim
+  
+  Dark colorscheme inspired by the colors of Kanagawa's famous painting
+  
+  ```vim
+  :colorscheme kanagawa
+  ```
+</Card>
+
+<Card title="Gruvbox" icon="fire" color="#d79921">
+  **Repository**: ellisonleao/gruvbox.nvim
+  
+  Retro groove color scheme with warm, earthy tones
+  
+  ```vim
+  :colorscheme gruvbox
+  ```
+</Card>
+
+<Card title="Rose Pine" icon="rose" color="#c4a7e7">
+  **Repository**: rose-pine/neovim
+  
+  Soho vibes for Neovim with low-contrast colors
+  
+  ```vim
+  :colorscheme rose-pine
+  ```
+</Card>
+
+<Card title="Tokyo Dark" icon="city" color="#7199ee">
+  **Repository**: tiagovla/tokyodark.nvim
+  
+  Clean dark theme with subtle highlights
+  
+  ```vim
+  :colorscheme tokyodark
+  ```
+</Card>
+
+<Card title="Everforest" icon="tree" color="#a7c080">
+  **Repository**: sainnhe/everforest
+  
+  Comfortable greenish theme for long coding sessions
+  
+  ```vim
+  :colorscheme everforest
+  ```
+</Card>
+
+<Card title="PaperColor" icon="file" color="#005f87">
+  **Repository**: NLKNguyen/papercolor-theme
+  
+  Light & dark theme inspired by Google's Material Design
+  
+  ```vim
+  :colorscheme PaperColor
+  ```
+</Card>
+
+</CardGroup>
+
+---
+
+## LazyVim Built-in Themes
+
+Additional themes inherited from LazyVim base installation:
+
+<Tabs>
+  <Tab title="Tokyo Night">
+    **Repository**: folke/tokyonight.nvim
+    
+    Clean dark theme with multiple variants
+    
+    ```vim
+    :colorscheme tokyonight
+    :colorscheme tokyonight-night
+    :colorscheme tokyonight-storm
+    :colorscheme tokyonight-day
+    :colorscheme tokyonight-moon
+    ```
+    
+    <Accordion title="Variants">
+    - **tokyonight-night**: Default dark theme
+    - **tokyonight-storm**: Darker variant with more contrast
+    - **tokyonight-day**: Light theme variant
+    - **tokyonight-moon**: Medium contrast variant
+    </Accordion>
+  </Tab>
+  
+  <Tab title="Catppuccin">
+    **Repository**: catppuccin/nvim
+    
+    Pastel theme with four flavors
+    
+    ```vim
+    :colorscheme catppuccin
+    :colorscheme catppuccin-latte
+    :colorscheme catppuccin-frappe
+    :colorscheme catppuccin-macchiato
+    :colorscheme catppuccin-mocha
+    ```
+    
+    <Accordion title="Flavors">
+    - **latte**: Light theme
+    - **frappe**: Warm dark theme
+    - **macchiato**: Medium contrast dark theme
+    - **mocha**: High contrast dark theme
+    </Accordion>
+  </Tab>
+</Tabs>
+
+---
+
+## Theme Configuration
+
+### Current Theme Setup
+
+All colorscheme plugins are defined in a single configuration file:
+
+```lua ~/workspace/source/nvim/lua/plugins/colorscheme.lua
+return {
+  { "rebelot/kanagawa.nvim" },
+  { "NLKNguyen/papercolor-theme" },
+  { "ellisonleao/gruvbox.nvim" },
+  { "rose-pine/neovim" },
+  { "tiagovla/tokyodark.nvim" },
+  { "sainnhe/everforest" },
+  {
+    "navarasu/onedark.nvim",
+    opts = {
+      highlights = {
+        Visual = { bg = "#ffff00" },
+      },
+    },
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "onedark",
+    },
+  },
+}
+```
+
+---
+
+## Switching Colorschemes
+
+<Steps>
+  <Step title="Temporary Change">
+    Use the `:colorscheme` command to switch themes temporarily:
+    
+    ```vim
+    :colorscheme kanagawa
+    ```
+    
+    This change will last until you restart Neovim.
+  </Step>
+  
+  <Step title="Permanent Change">
+    Edit `~/workspace/source/nvim/lua/plugins/colorscheme.lua` and update the LazyVim configuration:
+    
+    ```lua
+    {
+      "LazyVim/LazyVim",
+      opts = {
+        colorscheme = "gruvbox", -- Change this line
+      },
+    }
+    ```
+  </Step>
+  
+  <Step title="Reload Configuration">
+    Restart Neovim or run:
+    
+    ```vim
+    :source $MYVIMRC
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  Use `<leader>uC` to quickly toggle between light and dark variants of the current theme.
+</Tip>
+
+---
+
+## Theme Previewing
+
+LazyVim includes a colorscheme picker for easy theme switching:
+
+<CardGroup cols={2}>
+
+<Card title="Telescope Picker" icon="telescope">
+  Press `<leader>uC` or run:
+  
+  ```vim
+  :Telescope colorscheme
+  ```
+  
+  Navigate themes with `j`/`k` and preview in real-time!
+</Card>
+
+<Card title="Command Line" icon="terminal">
+  Type `:colorscheme` then press `<Tab>` to cycle through available themes:
+  
+  ```vim
+  :colorscheme <Tab>
+  ```
+</Card>
+
+</CardGroup>
+
+---
+
+## Customizing Themes
+
+### Override Specific Highlights
+
+You can customize any theme's colors by adding highlight overrides:
+
+```lua
+{
+  "ellisonleao/gruvbox.nvim",
+  opts = {
+    overrides = {
+      Comment = { fg = "#81878f", italic = true },
+      Visual = { bg = "#504945" },
+    },
+  },
+}
+```
+
+### Theme-Specific Options
+
+<Accordion title="Kanagawa Options">
+```lua
+{
+  "rebelot/kanagawa.nvim",
+  opts = {
+    theme = "wave",  -- wave, dragon, lotus
+    background = {
+      dark = "wave",
+      light = "lotus",
+    },
+  },
+}
+```
+</Accordion>
+
+<Accordion title="Gruvbox Options">
+```lua
+{
+  "ellisonleao/gruvbox.nvim",
+  opts = {
+    contrast = "hard",  -- hard, soft, or empty
+    transparent_mode = false,
+  },
+}
+```
+</Accordion>
+
+<Accordion title="Rose Pine Options">
+```lua
+{
+  "rose-pine/neovim",
+  name = "rose-pine",
+  opts = {
+    variant = "moon",  -- main, moon, dawn
+    dark_variant = "moon",
+  },
+}
+```
+</Accordion>
+
+---
+
+## Adding New Colorschemes
+
+To add a new colorscheme:
+
+<Steps>
+  <Step title="Add Plugin Spec">
+    Edit `~/workspace/source/nvim/lua/plugins/colorscheme.lua` and add the new theme:
+    
+    ```lua
+    return {
+      -- Existing themes...
+      { "your-username/your-colorscheme" },
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Neovim">
+    Lazy.nvim will automatically install the new plugin on restart.
+  </Step>
+  
+  <Step title="Activate Theme">
+    Try it out:
+    
+    ```vim
+    :colorscheme your-colorscheme
+    ```
+  </Step>
+  
+  <Step title="Make Default (Optional)">
+    Update the LazyVim configuration to use it permanently:
+    
+    ```lua
+    {
+      "LazyVim/LazyVim",
+      opts = {
+        colorscheme = "your-colorscheme",
+      },
+    }
+    ```
+  </Step>
+</Steps>
+
+---
+
+## Troubleshooting
+
+<Accordion title="Colors Look Wrong">
+  Ensure your terminal supports true colors:
+  
+  ```lua ~/workspace/source/nvim/lua/config/options.lua
+  vim.opt.termguicolors = true
+  ```
+  
+  This is enabled by default in LazyVim.
+</Accordion>
+
+<Accordion title="Theme Not Loading">
+  Check if the plugin is installed:
+  
+  ```vim
+  :Lazy
+  ```
+  
+  Look for the colorscheme plugin and ensure it's loaded.
+</Accordion>
+
+<Accordion title="Transparent Background">
+  Some themes support transparent backgrounds. Check the theme's documentation or try:
+  
+  ```lua
+  {
+    "your-theme/nvim",
+    opts = {
+      transparent = true,
+    },
+  }
+  ```
+</Accordion>
+
+---
+
+## Color Palette Reference
+
+### OneDark Colors
+
+The active colorscheme uses these primary colors:
+
+| Color Name | Hex Code | Usage |
+|------------|----------|-------|
+| Background | `#282c34` | Editor background |
+| Foreground | `#abb2bf` | Normal text |
+| Red | `#e06c75` | Errors, deletion |
+| Green | `#98c379` | Strings, addition |
+| Yellow | `#e5c07b` | Warnings, modified |
+| Blue | `#61afef` | Functions, keywords |
+| Purple | `#c678dd` | Constants, tags |
+| Cyan | `#56b6c2` | Operators, special |
+| Visual | `#ffff00` | Visual selection (custom) |
+
+<Note>
+  The Visual selection highlight is customized to bright yellow for better visibility during text selection.
+</Note>

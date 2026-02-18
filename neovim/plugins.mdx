@@ -1,0 +1,298 @@
+---
+title: "Plugins"
+description: "Overview of installed Neovim plugins and their configurations"
+---
+
+This Neovim setup is built on top of [LazyVim](https://www.lazyvim.org/), a modern Neovim distribution that provides sensible defaults and plugin management via [lazy.nvim](https://github.com/folke/lazy.nvim).
+
+## Plugin Manager
+
+### Lazy.nvim
+
+The configuration uses **lazy.nvim** for plugin management with automatic lazy-loading capabilities.
+
+```lua ~/workspace/source/nvim/lua/config/lazy.lua
+require("lazy").setup({
+  spec = {
+    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    { import = "plugins" },
+  },
+  defaults = {
+    lazy = false,
+    version = false,
+  },
+  install = { colorscheme = { "tokyonight", "habamax" } },
+  checker = {
+    enabled = true,
+    notify = false,
+  },
+})
+```
+
+## Custom Plugins
+
+All custom plugin configurations are located in `~/workspace/source/nvim/lua/plugins/`.
+
+<CardGroup cols={2}>
+
+<Card title="Colorschemes" icon="palette" href="#colorscheme-plugins">
+  Multiple theme options including Kanagawa, Gruvbox, and OneDark
+</Card>
+
+<Card title="LeetCode" icon="code" href="#leetcode-integration">
+  Practice coding problems directly in Neovim
+</Card>
+
+<Card title="Obsidian" icon="note-sticky" href="#obsidian-integration">
+  Markdown note-taking with Obsidian vault support
+</Card>
+
+<Card title="Completion" icon="keyboard" href="#completion-enhancements">
+  Tab completion and emoji support
+</Card>
+
+</CardGroup>
+
+---
+
+## Colorscheme Plugins
+
+Multiple colorscheme options are available with OneDark set as the default theme.
+
+```lua ~/workspace/source/nvim/lua/plugins/colorscheme.lua
+return {
+  { "rebelot/kanagawa.nvim" },
+  { "NLKNguyen/papercolor-theme" },
+  { "ellisonleao/gruvbox.nvim" },
+  { "rose-pine/neovim" },
+  { "tiagovla/tokyodark.nvim" },
+  { "sainnhe/everforest" },
+  {
+    "navarasu/onedark.nvim",
+    opts = {
+      highlights = {
+        Visual = { bg = "#ffff00" },
+      },
+    },
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "onedark",
+    },
+  },
+}
+```
+
+<Note>
+  The Visual mode highlight is customized to use a bright yellow background (`#ffff00`) for better visibility.
+</Note>
+
+---
+
+## LeetCode Integration
+
+Practice coding problems directly within Neovim using the **leetcode.nvim** plugin.
+
+```lua ~/workspace/source/nvim/lua/plugins/leetcode.lua
+return {
+  "kawre/leetcode.nvim",
+  build = ":TSUpdate html",
+  dependencies = {
+    "nvim-telescope/telescope.nvim",
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+  },
+  opts = {
+    lang = "python3",
+  },
+}
+```
+
+<Accordion title="Features">
+- **Language**: Configured for Python3 by default
+- **Integration**: Uses Telescope for problem selection
+- **Treesitter**: Syntax highlighting for HTML-based problem descriptions
+</Accordion>
+
+---
+
+## Obsidian Integration
+
+Seamless integration with Obsidian vaults for markdown note-taking.
+
+```lua ~/workspace/source/nvim/lua/plugins/obsidian.lua
+return {
+  "epwalsh/obsidian.nvim",
+  version = "*",
+  lazy = true,
+  ft = "markdown",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "hrsh7th/nvim-cmp",
+  },
+  opts = {
+    workspaces = {
+      {
+        name = "personal",
+        path = "/Users/leylandyang/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sharedvault",
+      },
+    },
+    completion = {
+      nvim_cmp = true,
+      min_chars = 2,
+    },
+    new_notes_location = "notes_subdir",
+    daily_notes = {
+      folder = "/daily notes",
+      date_format = "%m-%d-%Y",
+      alias_format = "%B %-d, %Y",
+      default_tags = { "daily-notes" },
+    },
+  },
+}
+```
+
+<Accordion title="Configuration Details">
+- **Workspace**: Syncs with iCloud Obsidian vault
+- **Completion**: Integrated with nvim-cmp for note linking
+- **Daily Notes**: Automatic date formatting and tagging
+- **Lazy Loading**: Only loads for markdown files
+</Accordion>
+
+---
+
+## Completion Enhancements
+
+Customized completion behavior with Tab key confirmation and emoji support.
+
+```lua ~/workspace/source/nvim/lua/plugins/tab-complete.lua
+return {
+  {
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-emoji",
+    },
+    opts = function(_, opts)
+      local cmp = require("cmp")
+
+      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            local entry = cmp.get_selected_entry()
+            if not entry then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              cmp.confirm()
+            end
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<CR>"] = cmp.mapping(function(fallback)
+          cmp.abort()
+          fallback()
+        end, { "i", "s", "c" }),
+      })
+    end,
+  },
+}
+```
+
+<Accordion title="Key Behaviors">
+- **Tab**: Auto-selects first item if none selected, then confirms
+- **Enter**: Aborts completion and inserts newline
+- **Emoji Support**: Adds emoji completion source via cmp-emoji
+</Accordion>
+
+---
+
+## File Picker Configuration
+
+Snacks.nvim picker is configured to show hidden files and respect .gitignore.
+
+```lua ~/workspace/source/nvim/lua/plugins/snacks-config.lua
+return {
+  {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        hidden = true,
+        ignored = true,
+      },
+    },
+  },
+}
+```
+
+---
+
+## Vim Training Game
+
+Practice Vim motions with an interactive game.
+
+```lua ~/workspace/source/nvim/lua/plugins/vimbegood.lua
+return {
+  {
+    "ThePrimeagen/vim-be-good",
+    cmd = "VimBeGood",
+    lazy = true,
+  },
+}
+```
+
+<Tip>
+  Launch the game with `:VimBeGood` command to practice hjkl navigation and other Vim motions.
+</Tip>
+
+---
+
+## Core LazyVim Plugins
+
+In addition to custom plugins, this setup inherits all LazyVim default plugins:
+
+<Accordion title="View Core Plugins">
+- **LSP**: nvim-lspconfig with Mason for language server management
+- **Completion**: nvim-cmp with multiple sources
+- **Treesitter**: Syntax highlighting and code understanding
+- **Telescope**: Fuzzy finder for files, buffers, and more
+- **Git**: Gitsigns for git integration
+- **UI**: Noice, Lualine, Bufferline for enhanced interface
+- **Editing**: Flash for quick navigation, Mini.pairs for auto-pairing
+- **Formatting**: Conform.nvim for code formatting
+- **Linting**: nvim-lint for code linting
+
+See the full list in `lazy-lock.json` at `~/workspace/source/nvim/lazy-lock.json`
+</Accordion>
+
+---
+
+## Managing Plugins
+
+<Steps>
+  <Step title="Open Lazy UI">
+    Press `<leader>l` or run `:Lazy` to open the plugin manager interface
+  </Step>
+  
+  <Step title="Update Plugins">
+    Press `U` in the Lazy UI to update all plugins
+  </Step>
+  
+  <Step title="Install New Plugin">
+    Add plugin spec to `~/workspace/source/nvim/lua/plugins/` directory
+  </Step>
+  
+  <Step title="Sync Changes">
+    Restart Neovim - Lazy.nvim will automatically install new plugins
+  </Step>
+</Steps>
+
+<Note>
+  Plugin update checking is enabled but notifications are disabled. Check manually via `:Lazy` command.
+</Note>

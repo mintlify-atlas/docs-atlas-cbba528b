@@ -1,0 +1,650 @@
+---
+title: "Customization"
+description: "How to customize and extend your Neovim setup"
+---
+
+This guide covers how to customize your LazyVim-based Neovim configuration to match your workflow and preferences.
+
+## Configuration Structure
+
+Your Neovim configuration follows the standard LazyVim structure:
+
+```
+~/workspace/source/nvim/
+├── init.lua                 # Entry point
+├── lazy-lock.json          # Plugin versions (auto-generated)
+├── lazyvim.json            # LazyVim extras configuration
+└── lua/
+    ├── config/
+    │   ├── autocmds.lua    # Auto commands
+    │   ├── keymaps.lua     # Custom keybindings
+    │   ├── lazy.lua        # Plugin manager setup
+    │   └── options.lua     # Vim options
+    └── plugins/            # Plugin specifications
+        ├── colorscheme.lua
+        ├── leetcode.lua
+        ├── obsidian.lua
+        ├── snacks-config.lua
+        ├── tab-complete.lua
+        └── vimbegood.lua
+```
+
+---
+
+## Customizing Options
+
+Vim options are configured in `lua/config/options.lua`.
+
+### Current Options
+
+```lua ~/workspace/source/nvim/lua/config/options.lua
+vim.g.root_spec = { "cwd" }
+```
+
+This sets the root directory detection to always use the current working directory.
+
+### Adding Custom Options
+
+<Tabs>
+  <Tab title="General Options">
+    ```lua ~/workspace/source/nvim/lua/config/options.lua
+    -- Line numbers
+    vim.opt.number = true
+    vim.opt.relativenumber = true
+    
+    -- Tabs and indentation
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = true
+    
+    -- Search
+    vim.opt.ignorecase = true
+    vim.opt.smartcase = true
+    
+    -- Appearance
+    vim.opt.cursorline = true
+    vim.opt.signcolumn = "yes"
+    vim.opt.wrap = false
+    ```
+  </Tab>
+  
+  <Tab title="Performance">
+    ```lua ~/workspace/source/nvim/lua/config/options.lua
+    -- Faster completion
+    vim.opt.updatetime = 250
+    vim.opt.timeoutlen = 300
+    
+    -- Disable animations
+    vim.g.snacks_animate = false
+    
+    -- Swap and backup
+    vim.opt.swapfile = false
+    vim.opt.backup = false
+    vim.opt.undofile = true
+    ```
+  </Tab>
+  
+  <Tab title="UI Options">
+    ```lua ~/workspace/source/nvim/lua/config/options.lua
+    -- Split behavior
+    vim.opt.splitright = true
+    vim.opt.splitbelow = true
+    
+    -- Scroll offset
+    vim.opt.scrolloff = 8
+    vim.opt.sidescrolloff = 8
+    
+    -- Completion menu
+    vim.opt.completeopt = "menu,menuone,noselect"
+    vim.opt.pumheight = 10
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Adding Custom Keybindings
+
+The keymaps file is currently minimal, using LazyVim defaults.
+
+### Example Custom Keybindings
+
+<Accordion title="File Operations">
+```lua ~/workspace/source/nvim/lua/config/keymaps.lua
+local map = vim.keymap.set
+
+-- Save file
+map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+
+-- Quit
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
+
+-- Save and quit
+map("n", "<leader>qw", "<cmd>wqa<cr>", { desc = "Save and quit all" })
+```
+</Accordion>
+
+<Accordion title="Buffer Navigation">
+```lua ~/workspace/source/nvim/lua/config/keymaps.lua
+local map = vim.keymap.set
+
+-- Close current buffer
+map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
+
+-- Navigate buffers
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+
+-- Move to specific buffer
+map("n", "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>")
+map("n", "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>")
+```
+</Accordion>
+
+<Accordion title="Text Editing">
+```lua ~/workspace/source/nvim/lua/config/keymaps.lua
+local map = vim.keymap.set
+
+-- Move lines up/down
+map("n", "<A-j>", ":m .+1<cr>==", { desc = "Move line down" })
+map("n", "<A-k>", ":m .-2<cr>==", { desc = "Move line up" })
+map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
+map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
+
+-- Better indenting
+map("v", "<", "<gv")
+map("v", ">", ">gv")
+
+-- Clear search highlight
+map("n", "<Esc>", "<cmd>nohlsearch<cr>")
+```
+</Accordion>
+
+---
+
+## Customizing Plugins
+
+### Modifying Existing Plugins
+
+Override any plugin's configuration by creating a spec in `lua/plugins/`:
+
+<Tabs>
+  <Tab title="Telescope">
+    Create `lua/plugins/telescope.lua`:
+    
+    ```lua
+    return {
+      "nvim-telescope/telescope.nvim",
+      keys = {
+        -- Add custom keymap
+        {
+          "<leader>fp",
+          function()
+            require("telescope.builtin").find_files({
+              cwd = require("lazy.core.config").options.root,
+            })
+          end,
+          desc = "Find Plugin File",
+        },
+      },
+      opts = {
+        defaults = {
+          layout_strategy = "horizontal",
+          layout_config = {
+            prompt_position = "top",
+            width = 0.9,
+            height = 0.9,
+          },
+          sorting_strategy = "ascending",
+        },
+      },
+    }
+    ```
+  </Tab>
+  
+  <Tab title="LSP">
+    Create `lua/plugins/lsp.lua`:
+    
+    ```lua
+    return {
+      "neovim/nvim-lspconfig",
+      opts = {
+        servers = {
+          -- Add language servers
+          pyright = {},
+          tsserver = {},
+          lua_ls = {
+            settings = {
+              Lua = {
+                diagnostics = {
+                  globals = { "vim" },
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Treesitter">
+    Create `lua/plugins/treesitter.lua`:
+    
+    ```lua
+    return {
+      "nvim-treesitter/nvim-treesitter",
+      opts = {
+        ensure_installed = {
+          "bash",
+          "c",
+          "cpp",
+          "go",
+          "html",
+          "javascript",
+          "json",
+          "lua",
+          "markdown",
+          "python",
+          "rust",
+          "typescript",
+          "yaml",
+        },
+        highlight = { enable = true },
+        indent = { enable = true },
+      },
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Disabling Plugins
+
+Disable any LazyVim plugin you don't need:
+
+```lua ~/workspace/source/nvim/lua/plugins/disabled.lua
+return {
+  -- Disable plugins
+  { "folke/flash.nvim", enabled = false },
+  { "echasnovski/mini.pairs", enabled = false },
+}
+```
+
+---
+
+## Adding New Plugins
+
+<Steps>
+  <Step title="Create Plugin Spec">
+    Create a new file in `lua/plugins/`, for example `lua/plugins/my-plugin.lua`:
+    
+    ```lua
+    return {
+      "author/plugin-name",
+      event = "VeryLazy",  -- or lazy = true
+      dependencies = {
+        "required-plugin",
+      },
+      opts = {
+        -- plugin options
+      },
+      config = function()
+        -- custom setup
+      end,
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Neovim">
+    Lazy.nvim will automatically detect and install the new plugin.
+  </Step>
+  
+  <Step title="Verify Installation">
+    Open Lazy UI to confirm:
+    
+    ```vim
+    :Lazy
+    ```
+  </Step>
+</Steps>
+
+### Example Plugin Additions
+
+<Accordion title="GitHub Copilot">
+```lua ~/workspace/source/nvim/lua/plugins/copilot.lua
+return {
+  {
+    "github/copilot.vim",
+    event = "InsertEnter",
+  },
+}
+```
+</Accordion>
+
+<Accordion title="Harpoon (File Navigation)">
+```lua ~/workspace/source/nvim/lua/plugins/harpoon.lua
+return {
+  "ThePrimeagen/harpoon",
+  branch = "harpoon2",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  keys = {
+    { "<leader>a", function() require("harpoon"):list():add() end, desc = "Harpoon add" },
+    { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end },
+  },
+}
+```
+</Accordion>
+
+<Accordion title="Markdown Preview">
+```lua ~/workspace/source/nvim/lua/plugins/markdown-preview.lua
+return {
+  "iamcco/markdown-preview.nvim",
+  cmd = { "MarkdownPreviewToggle", "MarkdownPreview" },
+  ft = { "markdown" },
+  build = function()
+    vim.fn["mkdp#util#install"]()
+  end,
+}
+```
+</Accordion>
+
+---
+
+## Auto Commands
+
+Create automatic behaviors with autocmds in `lua/config/autocmds.lua`.
+
+### Example Auto Commands
+
+<CardGroup cols={2}>
+
+<Card title="Format on Save" icon="wand-magic-sparkles">
+  ```lua
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
+    callback = function()
+      vim.lsp.buf.format({ async = false })
+    end,
+  })
+  ```
+</Card>
+
+<Card title="Highlight on Yank" icon="highlighter">
+  ```lua
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    callback = function()
+      vim.highlight.on_yank({
+        timeout = 200,
+      })
+    end,
+  })
+  ```
+</Card>
+
+<Card title="Auto-Save" icon="floppy-disk">
+  ```lua
+  vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+    pattern = "*",
+    command = "silent! wall",
+  })
+  ```
+</Card>
+
+<Card title="Remove Trailing Whitespace" icon="eraser">
+  ```lua
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
+    callback = function()
+      vim.cmd([[%s/\s\+$//e]])
+    end,
+  })
+  ```
+</Card>
+
+</CardGroup>
+
+---
+
+## LazyVim Extras
+
+LazyVim provides optional plugin bundles called "extras" for specific languages and tools.
+
+### Installed Extras
+
+Check your installed extras:
+
+```vim
+:LazyExtras
+```
+
+### Adding Language Support
+
+<Tabs>
+  <Tab title="Python">
+    Add Python language support:
+    
+    ```lua ~/workspace/source/nvim/lua/config/lazy.lua
+    require("lazy").setup({
+      spec = {
+        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+        { import = "lazyvim.plugins.extras.lang.python" },
+        { import = "plugins" },
+      },
+    })
+    ```
+  </Tab>
+  
+  <Tab title="TypeScript">
+    Add TypeScript/JavaScript support:
+    
+    ```lua ~/workspace/source/nvim/lua/config/lazy.lua
+    require("lazy").setup({
+      spec = {
+        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+        { import = "lazyvim.plugins.extras.lang.typescript" },
+        { import = "plugins" },
+      },
+    })
+    ```
+  </Tab>
+  
+  <Tab title="Rust">
+    Add Rust language support:
+    
+    ```lua ~/workspace/source/nvim/lua/config/lazy.lua
+    require("lazy").setup({
+      spec = {
+        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+        { import = "lazyvim.plugins.extras.lang.rust" },
+        { import = "plugins" },
+      },
+    })
+    ```
+  </Tab>
+  
+  <Tab title="Go">
+    Add Go language support:
+    
+    ```lua ~/workspace/source/nvim/lua/config/lazy.lua
+    require("lazy").setup({
+      spec = {
+        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+        { import = "lazyvim.plugins.extras.lang.go" },
+        { import = "plugins" },
+      },
+    })
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Custom Commands
+
+Create user commands for frequently used operations:
+
+```lua ~/workspace/source/nvim/lua/config/autocmds.lua
+-- Format current buffer
+vim.api.nvim_create_user_command("Format", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "Format current buffer" })
+
+-- Toggle line numbers
+vim.api.nvim_create_user_command("ToggleLineNumbers", function()
+  vim.opt.number = not vim.opt.number:get()
+end, { desc = "Toggle line numbers" })
+
+-- Open config directory
+vim.api.nvim_create_user_command("Config", function()
+  vim.cmd("cd ~/.config/nvim | Oil")
+end, { desc = "Open config directory" })
+```
+
+---
+
+## Modifying Existing Configurations
+
+### Update Colorscheme
+
+Change the default colorscheme in `lua/plugins/colorscheme.lua`:
+
+```lua
+{
+  "LazyVim/LazyVim",
+  opts = {
+    colorscheme = "kanagawa",  -- Change from "onedark"
+  },
+}
+```
+
+### Customize Completion Behavior
+
+The current setup uses Tab for completion. Modify `lua/plugins/tab-complete.lua` to change this behavior.
+
+### Adjust Root Directory Detection
+
+Currently set to always use CWD. Modify in `lua/config/options.lua`:
+
+```lua
+-- Use git root, then cwd
+vim.g.root_spec = { ".git", "cwd" }
+
+-- Use LSP root, then git root, then cwd
+vim.g.root_spec = { "lsp", ".git", "cwd" }
+```
+
+---
+
+## Performance Optimization
+
+### Disable Unused Features
+
+```lua ~/workspace/source/nvim/lua/config/options.lua
+-- Disable animations
+vim.g.snacks_animate = false
+
+-- Reduce updatetime
+vim.opt.updatetime = 200
+
+-- Limit completion items
+vim.opt.pumheight = 10
+```
+
+### Lazy-Load Plugins
+
+Ensure plugins only load when needed:
+
+```lua
+return {
+  "plugin-name",
+  lazy = true,
+  event = "VeryLazy",  -- or "BufReadPost", "InsertEnter", etc.
+  ft = "python",       -- only for Python files
+  cmd = "PluginCommand",  -- only when command is run
+  keys = {              -- only when key is pressed
+    { "<leader>x", "<cmd>PluginCommand<cr>" },
+  },
+}
+```
+
+---
+
+## Troubleshooting
+
+<Accordion title="Plugin Not Loading">
+1. Check plugin spec syntax in `lua/plugins/`
+2. Verify with `:Lazy` and look for errors
+3. Try `:Lazy sync` to reinstall
+4. Check `~/.local/state/nvim/lazy.nvim.log` for errors
+</Accordion>
+
+<Accordion title="Keybinding Not Working">
+1. Check for conflicts with `:verbose map <key>`
+2. Ensure keymap is defined in correct mode (`n`, `i`, `v`)
+3. Try reloading config with `:source $MYVIMRC`
+</Accordion>
+
+<Accordion title="LSP Not Starting">
+1. Check if language server is installed: `:Mason`
+2. Verify LSP is attached: `:LspInfo`
+3. Check logs: `:LspLog`
+4. Ensure file type is detected: `:set ft?`
+</Accordion>
+
+<Accordion title="Slow Startup">
+1. Profile startup: `nvim --startuptime startup.log`
+2. Disable unnecessary plugins
+3. Ensure plugins are lazy-loaded properly
+4. Check for heavy autocmds
+</Accordion>
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+
+<Card title="Organization" icon="folder-tree">
+  - One plugin per file in `lua/plugins/`
+  - Group related options in `lua/config/`
+  - Use descriptive file names
+  - Comment complex configurations
+</Card>
+
+<Card title="Performance" icon="gauge-high">
+  - Lazy-load plugins when possible
+  - Disable unused features
+  - Profile before optimizing
+  - Use `event`, `ft`, `cmd` for loading
+</Card>
+
+<Card title="Keybindings" icon="keyboard">
+  - Use descriptive descriptions
+  - Group related keys with leader
+  - Check for conflicts with `:verbose map`
+  - Document custom mappings
+</Card>
+
+<Card title="Maintenance" icon="wrench">
+  - Update plugins regularly with `:Lazy sync`
+  - Review changelog for breaking changes
+  - Keep `lazy-lock.json` in version control
+  - Test changes before committing
+</Card>
+
+</CardGroup>
+
+---
+
+## Resources
+
+<Card title="Documentation" icon="book">
+  - [LazyVim Documentation](https://www.lazyvim.org/)
+  - [Neovim User Manual](https://neovim.io/doc/user/)
+  - [Lazy.nvim Documentation](https://github.com/folke/lazy.nvim)
+  - [LazyVim Plugin Specs](https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins)
+</Card>
+
+<Tip>
+  Explore the LazyVim source code at `~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/` to understand default configurations.
+</Tip>

@@ -1,0 +1,419 @@
+---
+title: Font Configuration
+description: Guide to configuring fonts in Alacritty with Nerd Font support
+---
+
+## Overview
+
+Alacritty uses **0xProto Nerd Font Mono** for beautiful, icon-rich terminal output with excellent code readability.
+
+## Current Font Configuration
+
+```toml alacritty.toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+```
+
+<CardGroup cols={2}>
+  <Card title="Font Family" icon="font">
+    **0xProto Nerd Font Mono** - Modern programming font with icon support
+  </Card>
+  <Card title="Font Size" icon="text-size">
+    **16pt** - Optimal size for readability and screen real estate
+  </Card>
+</CardGroup>
+
+## About 0xProto Nerd Font
+
+**0xProto** is a modern monospace font designed specifically for programming:
+
+- Clear distinction between similar characters (0/O, 1/l/I)
+- Optimized for code readability
+- Perfect for long coding sessions
+- Includes all Nerd Font icons and glyphs
+
+### Nerd Font Features
+
+Nerd Fonts patch developer-targeted fonts with a high number of glyphs (icons):
+
+<AccordionGroup>
+  <Accordion title="Icon Sets Included">
+    - **Font Awesome** - Popular icon library
+    - **Devicons** - Programming language logos
+    - **Octicons** - GitHub's icon set
+    - **Material Design Icons** - Google's icon library
+    - **Weather Icons** - Weather symbols
+    - **Powerline Symbols** - Status line separators
+    - **Font Logos** - Font family logos
+    - **Pomicons** - Miscellaneous icons
+  </Accordion>
+  
+  <Accordion title="Supported Icons Examples">
+    ```
+      Git branch
+      Folder
+      File
+      Lock
+      Check mark
+      Error
+      Warning
+      Search
+      Settings
+    󰃨  Desktop
+    󰉼  Storage
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+Nerd Fonts are essential for modern terminal tools like **Oh My Posh**, **Starship**, **Powerlevel10k**, and file managers like **lf** or **ranger**.
+</Note>
+
+## Installation
+
+### macOS
+
+#### Using Homebrew
+
+```bash
+brew tap homebrew/cask-fonts
+brew install font-0xproto-nerd-font
+```
+
+#### Manual Installation
+
+1. Download from [Nerd Fonts Releases](https://github.com/ryanoasis/nerd-fonts/releases)
+2. Extract the `.zip` file
+3. Double-click `.ttf` files to install
+4. Restart Alacritty
+
+### Linux
+
+#### Debian/Ubuntu
+
+```bash
+# Download and install
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts
+
+# Download 0xProto Nerd Font
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/0xProto.zip
+unzip 0xProto.zip
+rm 0xProto.zip
+
+# Refresh font cache
+fc-cache -fv
+```
+
+#### Arch Linux
+
+```bash
+yay -S ttf-0xproto-nerd
+# or
+paru -S ttf-0xproto-nerd
+```
+
+### Verification
+
+Verify the font is installed:
+
+```bash
+fc-list | grep -i "0xProto"
+```
+
+Expected output:
+```
+/Users/username/Library/Fonts/0xProtoNerdFont-Regular.ttf: 0xProto Nerd Font Mono:style=Regular
+```
+
+## Font Customization
+
+### Adjusting Font Size
+
+```toml alacritty.toml
+[font]
+size = 14  # Smaller - more content
+size = 16  # Default - balanced
+size = 18  # Larger - better readability
+size = 20  # Extra large - presentations
+```
+
+<Tip>
+Font size preference varies by screen resolution:
+- **4K displays**: 16-18pt
+- **1080p displays**: 14-16pt
+- **Laptop screens**: 12-14pt
+</Tip>
+
+### Font Variants
+
+Alacritty supports different font styles for different text types:
+
+```toml alacritty.toml
+[font]
+normal.family = "0xProto Nerd Font Mono"
+normal.style = "Regular"
+
+bold.family = "0xProto Nerd Font Mono"
+bold.style = "Bold"
+
+italic.family = "0xProto Nerd Font Mono"
+italic.style = "Italic"
+
+bold_italic.family = "0xProto Nerd Font Mono"
+bold_italic.style = "Bold Italic"
+```
+
+### Font Offset
+
+Fine-tune vertical and horizontal positioning:
+
+```toml alacritty.toml
+[font]
+offset.x = 0
+offset.y = 0
+```
+
+Adjust if characters appear misaligned:
+```toml
+offset.y = 1   # Move down slightly
+offset.y = -1  # Move up slightly
+```
+
+### Glyph Offset
+
+Adjust individual glyph positioning:
+
+```toml alacritty.toml
+[font]
+glyph_offset.x = 0
+glyph_offset.y = 0
+```
+
+## Alternative Nerd Fonts
+
+While **0xProto** is configured, here are excellent alternatives:
+
+<CardGroup cols={2}>
+  <Card title="JetBrains Mono" icon="j">
+    Popular font with increased height for better readability
+    ```toml
+    normal.family = "JetBrainsMono Nerd Font Mono"
+    ```
+  </Card>
+  
+  <Card title="Fira Code" icon="f">
+    Features programming ligatures for combined characters
+    ```toml
+    normal.family = "FiraCode Nerd Font Mono"
+    ```
+  </Card>
+  
+  <Card title="Hack" icon="h">
+    Designed for source code, easy on the eyes
+    ```toml
+    normal.family = "Hack Nerd Font Mono"
+    ```
+  </Card>
+  
+  <Card title="Cascadia Code" icon="c">
+    Microsoft's programming font with ligatures
+    ```toml
+    normal.family = "CaskaydiaCove Nerd Font Mono"
+    ```
+  </Card>
+  
+  <Card title="Meslo" icon="m">
+    Customized version of Apple's Menlo
+    ```toml
+    normal.family = "MesloLGS Nerd Font Mono"
+    ```
+  </Card>
+  
+  <Card title="Source Code Pro" icon="s">
+    Adobe's monospaced font family
+    ```toml
+    normal.family = "SauceCodePro Nerd Font Mono"
+    ```
+  </Card>
+</CardGroup>
+
+### Popular Font Comparison
+
+| Font | Size | Ligatures | Character Set | Best For |
+|------|------|-----------|---------------|----------|
+| 0xProto | Medium | No | Excellent | General coding |
+| JetBrains Mono | Large | Optional | Excellent | Long sessions |
+| Fira Code | Medium | Yes | Good | Modern code |
+| Hack | Small | No | Good | Dense code |
+| Cascadia Code | Medium | Yes | Excellent | Windows users |
+| Meslo | Medium | No | Good | macOS users |
+
+## Font Ligatures
+
+Some Nerd Fonts support ligatures - combined character glyphs:
+
+```
+!=  becomes  ≠
+>=  becomes  ≥
+<=  becomes  ≤
+==  becomes  ⩵
+=>  becomes  ⇒
+->  becomes  →
+```
+
+### Enabling Ligatures
+
+For fonts that support ligatures (like Fira Code):
+
+```toml alacritty.toml
+[font]
+normal.family = "FiraCode Nerd Font Mono"
+
+# Ligatures are automatically enabled if font supports them
+```
+
+<Note>
+**0xProto** does not include ligatures, focusing instead on character clarity and simplicity.
+</Note>
+
+## Advanced Configuration
+
+### Font Smoothing (macOS)
+
+```toml alacritty.toml
+[font]
+applefontsmoothing = true
+```
+
+### Builtin Box Drawing
+
+Use built-in font glyphs for box drawing characters:
+
+```toml alacritty.toml
+[font]
+builtin_box_drawing = true
+```
+
+This improves performance and appearance of box-drawing characters used in TUI applications.
+
+## Troubleshooting
+
+### Icons Not Displaying
+
+<Steps>
+  <Step title="Verify Nerd Font Installation">
+    Check if the font is properly installed:
+    ```bash
+    fc-list | grep -i nerd
+    ```
+  </Step>
+  
+  <Step title="Check Font Name">
+    Ensure the exact font family name matches:
+    ```bash
+    fc-list | grep -i "0xProto"
+    ```
+    Use the exact name shown in the output.
+  </Step>
+  
+  <Step title="Restart Alacritty">
+    Close all Alacritty windows and reopen.
+  </Step>
+  
+  <Step title="Test Icons">
+    Try displaying icons:
+    ```bash
+    echo "     "
+    ```
+  </Step>
+</Steps>
+
+### Font Too Large/Small
+
+```toml
+[font]
+# Adjust size incrementally
+size = 14  # Start here if too large
+size = 18  # Start here if too small
+```
+
+### Blurry Text
+
+#### On macOS:
+```bash
+# Disable font smoothing system-wide
+defaults write -g AppleFontSmoothing -int 0
+
+# Or enable it
+defaults write -g AppleFontSmoothing -int 1
+```
+
+#### In Alacritty:
+```toml
+[font]
+applefontsmoothing = false  # Try toggling this
+```
+
+### Characters Misaligned
+
+```toml
+[font]
+offset.y = 1   # Adjust vertical offset
+glyph_offset.x = 0  # Adjust horizontal offset per glyph
+```
+
+## Font Resources
+
+<CardGroup cols={2}>
+  <Card title="Nerd Fonts Repository" icon="github" href="https://github.com/ryanoasis/nerd-fonts">
+    Official Nerd Fonts repository with all patched fonts
+  </Card>
+  
+  <Card title="Nerd Fonts Cheat Sheet" icon="icons" href="https://www.nerdfonts.com/cheat-sheet">
+    Browse and search all available icons
+  </Card>
+  
+  <Card title="Programming Fonts" icon="code" href="https://www.programmingfonts.org">
+    Test and compare programming fonts
+  </Card>
+  
+  <Card title="0xProto Font" icon="link" href="https://github.com/0xType/0xProto">
+    Official 0xProto font repository
+  </Card>
+</CardGroup>
+
+## Testing Your Font
+
+Create a test file to verify font rendering:
+
+```bash test-font.sh
+#!/bin/bash
+
+echo "=== Font Test ==="
+echo ""
+echo "Icons:      "
+echo "Arrows: → ← ↑ ↓ ⇒ ⇐"
+echo "Box: ┌─┐ │ └─┘"
+echo "Similar: 0O 1lI g9q"
+echo "Code: != >= <= == =>"
+echo ""
+```
+
+Run it:
+```bash
+chmod +x test-font.sh
+./test-font.sh
+```
+
+## Related Pages
+
+<CardGroup cols={2}>
+  <Card title="Alacritty Config" icon="terminal" href="/terminal/alacritty-config">
+    Main configuration settings
+  </Card>
+  <Card title="Theme Gallery" icon="palette" href="/terminal/themes">
+    Browse 151 color themes
+  </Card>
+</CardGroup>

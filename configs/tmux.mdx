@@ -1,0 +1,377 @@
+---
+title: "Tmux Configuration"
+description: "Terminal multiplexer configuration with Vim keybindings and Catppuccin theme"
+---
+
+## Overview
+
+This tmux configuration provides a productive terminal multiplexer setup with Vim-style keybindings, modern features, and a beautiful Catppuccin theme powered by TPM (Tmux Plugin Manager).
+
+## Configuration File
+
+The complete configuration is contained in a single `tmux.conf` file:
+
+```bash
+~/.config/tmux/tmux.conf
+```
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Vim Keybindings" icon="keyboard">
+    Full Vim-style navigation in copy mode with visual selection support
+  </Card>
+  <Card title="True Color Support" icon="palette">
+    24-bit RGB color support for modern terminal themes
+  </Card>
+  <Card title="Mouse Support" icon="mouse-pointer">
+    Click, scroll, and resize panes with mouse
+  </Card>
+  <Card title="Custom Prefix" icon="command">
+    Space-based prefix key (Ctrl+Space) instead of default Ctrl+b
+  </Card>
+</CardGroup>
+
+## Complete Configuration
+
+<CodeGroup>
+```bash title="tmux.conf"
+# Enable Vim keybindings in copy mode
+set-option -sa terminal-overrides ",xterm*:Tc:RGB:sitm=\E[3m:ritm=\E[23m"
+set -g default-terminal "tmux-256color"
+setw -g mode-keys vi
+set -ga terminal-overrides ',xterm-256color:Tc'
+set -g renumber-windows on
+set -g base-index 1
+
+# remap prefix from 'C-b' to 'C-Space'
+unbind C-b
+set -g prefix C-Space
+bind C-Space send-prefix
+
+set -as terminal-overrides ',xterm*:sitm=\E[3m'
+set-option -sg escape-time 10
+set-option -g focus-events on
+set -g mouse on
+
+# Enter copy mode with Prefix+[
+bind-key [ copy-mode
+
+# Vim-like navigation in copy mode
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'y' send -X copy-selection
+bind-key -T copy-mode-vi 'V' send -X rectangle-toggle
+
+# Plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+
+run '~/.tmux/plugins/tpm/tpm'
+```
+</CodeGroup>
+
+## Configuration Breakdown
+
+### Terminal Settings
+
+<Accordion title="True Color & Terminal Type">
+```bash
+set-option -sa terminal-overrides ",xterm*:Tc:RGB:sitm=\E[3m:ritm=\E[23m"
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ',xterm-256color:Tc'
+```
+
+**Features:**
+- **True color support** (`Tc:RGB`) - 24-bit color in terminal
+- **Italic support** (`sitm`, `ritm`) - Proper italic text rendering
+- **256 color mode** - Fallback for compatibility
+- **xterm compatibility** - Works with most terminal emulators
+</Accordion>
+
+### Vim Integration
+
+<Tabs>
+  <Tab title="Copy Mode">
+    ```bash
+    setw -g mode-keys vi
+    bind-key [ copy-mode
+    ```
+    
+    Enables Vim keybindings in copy mode:
+    - `h`, `j`, `k`, `l` for navigation
+    - `/` and `?` for search
+    - `Prefix + [` to enter copy mode
+  </Tab>
+  
+  <Tab title="Visual Selection">
+    ```bash
+    bind-key -T copy-mode-vi 'v' send -X begin-selection
+    bind-key -T copy-mode-vi 'y' send -X copy-selection
+    bind-key -T copy-mode-vi 'V' send -X rectangle-toggle
+    ```
+    
+    Vim-like visual selection:
+    - `v` - Begin visual selection
+    - `y` - Yank/copy selection
+    - `V` - Toggle rectangular selection
+  </Tab>
+</Tabs>
+
+### Prefix Key
+
+The prefix key is remapped for easier access:
+
+```bash
+unbind C-b
+set -g prefix C-Space
+bind C-Space send-prefix
+```
+
+<Note>
+  **Ctrl+Space** is easier to press than the default **Ctrl+b**, especially for Vim users who keep their hands on the home row.
+</Note>
+
+### Window Management
+
+```bash
+set -g renumber-windows on
+set -g base-index 1
+```
+
+**Benefits:**
+- **Auto-renumbering** - Windows automatically renumber when one is closed
+- **Base index 1** - Windows start at 1 instead of 0 (matches keyboard layout)
+
+### Performance Optimizations
+
+<CodeGroup>
+```bash title="Escape Time"
+set-option -sg escape-time 10
+```
+
+```bash title="Focus Events"
+set-option -g focus-events on
+```
+</CodeGroup>
+
+<Accordion title="Why These Matter">
+- **Fast escape time** (10ms) - Reduces lag in Vim/Neovim when pressing ESC
+- **Focus events** - Allows Vim to detect when tmux pane gains/loses focus
+  - Enables auto-reload of files
+  - Triggers FocusGained/FocusLost autocommands
+</Accordion>
+
+### Mouse Support
+
+```bash
+set -g mouse on
+```
+
+**Enables:**
+- Click to switch panes and windows
+- Drag to resize panes
+- Scroll to navigate history
+- Right-click context menu
+
+## Plugin System
+
+This configuration uses **TPM** (Tmux Plugin Manager) for plugin management:
+
+### Installed Plugins
+
+<Tabs>
+  <Tab title="TPM">
+    ```bash
+    set -g @plugin 'tmux-plugins/tpm'
+    ```
+    
+    The plugin manager itself. Required for all other plugins.
+    
+    **Installation:**
+    ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ```
+  </Tab>
+  
+  <Tab title="Catppuccin Theme">
+    ```bash
+    set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+    ```
+    
+    Beautiful Catppuccin color scheme for tmux.
+    
+    **Features:**
+    - Mocha variant (dark theme)
+    - Status bar styling
+    - Window status indicators
+    - Pane border colors
+  </Tab>
+</Tabs>
+
+### Plugin Management
+
+<Steps>
+  <Step title="Install TPM">
+    ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ```
+  </Step>
+  
+  <Step title="Install Plugins">
+    Inside tmux, press:
+    ```
+    Prefix + I
+    ```
+    (That's Ctrl+Space, then Shift+i)
+  </Step>
+  
+  <Step title="Update Plugins">
+    ```
+    Prefix + U
+    ```
+  </Step>
+  
+  <Step title="Uninstall Plugins">
+    Remove plugin line from config, then:
+    ```
+    Prefix + Alt + u
+    ```
+  </Step>
+</Steps>
+
+## Common Keybindings
+
+### Default Keybindings
+
+| Keybinding | Action |
+|------------|--------|
+| `Ctrl+Space` | Prefix key |
+| `Prefix + c` | Create new window |
+| `Prefix + ,` | Rename window |
+| `Prefix + &` | Kill window |
+| `Prefix + %` | Split pane vertically |
+| `Prefix + "` | Split pane horizontally |
+| `Prefix + [` | Enter copy mode |
+| `Prefix + ]` | Paste buffer |
+| `Prefix + d` | Detach from session |
+
+### Copy Mode (Vim-style)
+
+| Keybinding | Action |
+|------------|--------|
+| `v` | Begin selection |
+| `y` | Copy selection |
+| `V` | Rectangle select |
+| `h/j/k/l` | Navigate |
+| `/` | Search forward |
+| `?` | Search backward |
+| `q` | Exit copy mode |
+
+## Installation
+
+<Steps>
+  <Step title="Create config directory">
+    ```bash
+    mkdir -p ~/.config/tmux/plugins
+    ```
+  </Step>
+  
+  <Step title="Copy configuration">
+    ```bash
+    cp tmux.conf ~/.config/tmux/tmux.conf
+    ```
+  </Step>
+  
+  <Step title="Install TPM">
+    ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ```
+  </Step>
+  
+  <Step title="Start tmux">
+    ```bash
+    tmux
+    ```
+  </Step>
+  
+  <Step title="Install plugins">
+    Press `Ctrl+Space` then `I` (capital i)
+  </Step>
+</Steps>
+
+## Customization Tips
+
+### Adding Custom Keybindings
+
+Add to your `tmux.conf`:
+
+```bash
+# Split panes with | and -
+bind | split-window -h
+bind - split-window -v
+
+# Vim-like pane navigation
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+```
+
+### Changing the Theme
+
+Replace the Catppuccin plugin:
+
+```bash
+# Alternative themes
+set -g @plugin 'dracula/tmux'
+set -g @plugin 'egel/tmux-gruvbox'
+set -g @plugin 'jimeh/tmux-themepack'
+```
+
+### Status Bar Customization
+
+```bash
+# Custom status bar
+set -g status-position top
+set -g status-justify left
+set -g status-style 'bg=colour234 fg=colour137'
+```
+
+## Troubleshooting
+
+<Accordion title="Colors Look Wrong">
+Ensure your terminal emulator supports true color:
+
+```bash
+# Test true color support
+curl -s https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
+```
+
+Set `TERM` in your shell config:
+```bash
+export TERM=xterm-256color
+```
+</Accordion>
+
+<Accordion title="Plugins Not Working">
+1. Check TPM is installed: `ls ~/.tmux/plugins/tpm`
+2. Reload tmux config: `tmux source ~/.config/tmux/tmux.conf`
+3. Install plugins: `Prefix + I`
+4. Check plugin output: `~/.tmux/plugins/tpm/bin/install_plugins`
+</Accordion>
+
+<Accordion title="Escape Key Lag in Vim">
+The `escape-time 10` setting should fix this. If not:
+
+```bash
+# Set even lower (not recommended below 10)
+set-option -sg escape-time 0
+```
+</Accordion>
+
+## Resources
+
+- [Tmux Manual](https://man.openbsd.org/tmux.1)
+- [TPM Repository](https://github.com/tmux-plugins/tpm)
+- [Catppuccin Tmux](https://github.com/dreamsofcode-io/catppuccin-tmux)
+- [Tmux Cheat Sheet](https://tmuxcheatsheet.com/)

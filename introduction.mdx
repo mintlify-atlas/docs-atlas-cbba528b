@@ -1,0 +1,162 @@
+---
+title: "YangleyLand Configs"
+description: "A modern, unified dotfiles collection for macOS development with Vim-style keybindings across all tools"
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="Hero Dark"
+/>
+
+## Welcome to YangleyLand Configs
+
+A carefully crafted collection of configuration files for building a powerful, efficient development environment on macOS. This setup brings together the best modern terminal tools with a unified Vim-style navigation experience.
+
+<Note>
+  All configurations are built around **Vim-style keybindings** (hjkl navigation) for consistent muscle memory across your entire workflow.
+</Note>
+
+## What's Included
+
+<CardGroup cols={2}>
+  <Card
+    title="Neovim"
+    icon="code"
+    href="/configs/neovim"
+  >
+    LazyVim-based configuration with custom plugins for Obsidian, LeetCode, and more. Features multiple colorscheme options including OneDark, Kanagawa, and Gruvbox.
+  </Card>
+  <Card
+    title="Alacritty Terminal"
+    icon="terminal"
+    href="/configs/alacritty"
+  >
+    Fast, GPU-accelerated terminal emulator with 150+ theme presets. Configured with 0xProto Nerd Font, transparency, and blur effects.
+  </Card>
+  <Card
+    title="Tmux"
+    icon="window-restore"
+    href="/configs/tmux"
+  >
+    Terminal multiplexer with Catppuccin theme and Vim-style copy mode. Features custom prefix (Ctrl-Space) and seamless navigation.
+  </Card>
+  <Card
+    title="AeroSpace"
+    icon="window-maximize"
+    href="/configs/aerospace"
+  >
+    Tiling window manager for macOS with i3-inspired Vim keybindings. Manage workspaces with Alt+hjkl navigation.
+  </Card>
+</CardGroup>
+
+## Key Features
+
+<AccordionGroup>
+  <Accordion title="Unified Vim Keybindings" icon="keyboard">
+    Every tool in this configuration uses consistent Vim-style navigation:
+    - **h/j/k/l** for directional movement
+    - **Alt+hjkl** for window/pane navigation in AeroSpace
+    - **Vim mode** in Tmux copy mode
+    - Full Vim power in Neovim
+    
+    This creates muscle memory that works everywhere in your workflow.
+  </Accordion>
+
+  <Accordion title="Modern Development Tools" icon="wrench">
+    Built on top of modern, actively maintained tools:
+    - **LazyVim** for Neovim plugin management
+    - **Catppuccin** theme ecosystem
+    - **Alacritty** for GPU-accelerated rendering
+    - **AeroSpace** for native macOS tiling
+  </Accordion>
+
+  <Accordion title="Extensive Customization" icon="palette">
+    - 150+ Alacritty terminal themes
+    - Multiple Neovim colorschemes (OneDark, Kanagawa, Gruvbox, Rose Pine, etc.)
+    - Custom plugins for Obsidian note-taking and LeetCode practice
+    - Configurable transparency and blur effects
+  </Accordion>
+
+  <Accordion title="Optimized for Productivity" icon="bolt">
+    - Fast startup times with lazy loading
+    - Minimal configuration overhead
+    - Sensible defaults with room for personalization
+    - Mouse support where it makes sense (Tmux, terminal)
+  </Accordion>
+</AccordionGroup>
+
+## Quick Preview
+
+### Neovim Configuration Highlights
+
+```lua nvim/lua/config/options.lua
+-- Set root directory to current working directory
+vim.g.root_spec = { "cwd" }
+```
+
+### Tmux with Vim Keybindings
+
+```bash tmux/tmux.conf
+# Vim-style navigation in copy mode
+setw -g mode-keys vi
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'y' send -X copy-selection
+
+# Custom prefix: Ctrl-Space
+set -g prefix C-Space
+```
+
+### AeroSpace Window Management
+
+```toml aerospace/aerospace.toml
+# Vim-style focus navigation
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move windows with Shift
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+```
+
+## Philosophy
+
+This configuration is built on three principles:
+
+1. **Consistency**: Vim keybindings everywhere possible
+2. **Speed**: Fast tools with optimized configurations
+3. **Simplicity**: Minimal setup, maximum productivity
+
+<Warning>
+  This configuration is optimized for **macOS**. While Neovim, Tmux, and Alacritty work cross-platform, AeroSpace is macOS-specific.
+</Warning>
+
+## Get Started
+
+Ready to set up your development environment? Head to the [Installation Guide](/installation) to get started.
+
+<CardGroup cols={2}>
+  <Card
+    title="Installation Guide"
+    icon="download"
+    href="/installation"
+  >
+    Step-by-step instructions to install and configure all tools
+  </Card>
+  <Card
+    title="View on GitHub"
+    icon="github"
+    href="https://github.com/yangleyland/configs"
+  >
+    Check out the source code and star the repository
+  </Card>
+</CardGroup>

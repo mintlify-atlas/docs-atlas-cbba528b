@@ -1,0 +1,190 @@
+---
+title: 'AeroSpace Setup'
+description: 'Install and configure AeroSpace window manager for macOS'
+---
+
+# AeroSpace Setup
+
+AeroSpace is a tiling window manager for macOS that uses i3-like tree paradigm. This guide covers installation and configuration.
+
+## Installation
+
+<Steps>
+  <Step title="Install AeroSpace">
+    Install AeroSpace using Homebrew:
+    ```bash
+    brew install --cask nikitabobko/tap/aerospace
+    ```
+  </Step>
+
+  <Step title="Copy Configuration">
+    Copy the configuration file to your home directory:
+    ```bash
+    cp ~/workspace/source/aerospace/aerospace.toml ~/.aerospace.toml
+    ```
+  </Step>
+
+  <Step title="Start AeroSpace">
+    Launch AeroSpace from Applications or use:
+    ```bash
+    open -a AeroSpace
+    ```
+    
+    AeroSpace will automatically start at login (configured with `start-at-login = true`).
+  </Step>
+
+  <Step title="Verify Installation">
+    Press `Alt+Tab` to test workspace switching. You should be able to navigate between workspaces.
+  </Step>
+</Steps>
+
+## Configuration Overview
+
+The configuration file (`~/.aerospace.toml`) controls all aspects of AeroSpace behavior.
+
+### Core Settings
+
+<AccordionGroup>
+  <Accordion title="Startup Behavior">
+    ```toml
+    start-at-login = true
+    after-login-command = []
+    after-startup-command = []
+    ```
+    
+    - `start-at-login`: Automatically launches AeroSpace when you log in
+    - `after-login-command`: Commands to run after macOS login
+    - `after-startup-command`: Commands to run after AeroSpace starts
+  </Accordion>
+
+  <Accordion title="Layout Configuration">
+    ```toml
+    default-root-container-layout = 'tiles'
+    default-root-container-orientation = 'auto'
+    accordion-padding = 30
+    ```
+    
+    - **Layout**: `tiles` (default) or `accordion`
+    - **Orientation**: `auto` (wide monitors get horizontal, tall get vertical)
+    - **Accordion padding**: 30 pixels (set to 0 to disable)
+  </Accordion>
+
+  <Accordion title="Normalization">
+    ```toml
+    enable-normalization-flatten-containers = true
+    enable-normalization-opposite-orientation-for-nested-containers = true
+    ```
+    
+    These settings help maintain clean window hierarchies and prevent unnecessary nesting.
+  </Accordion>
+
+  <Accordion title="Mouse Behavior">
+    ```toml
+    on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+    on-focus-changed = "move-mouse window-lazy-center"
+    ```
+    
+    Mouse automatically follows focus when switching between windows or monitors.
+  </Accordion>
+
+  <Accordion title="Gaps">
+    ```toml
+    [gaps]
+    inner.horizontal = 0
+    inner.vertical = 0
+    outer.left = 0
+    outer.bottom = 0
+    outer.top = 0
+    outer.right = 0
+    ```
+    
+    No gaps between windows or screen edges. Adjust these values to add spacing.
+  </Accordion>
+</AccordionGroup>
+
+### Keyboard Layout
+
+```toml
+key-mapping.preset = 'qwerty'
+```
+
+Set to `'qwerty'` or `'dvorak'` based on your keyboard layout.
+
+## Service Mode
+
+AeroSpace includes a special "service" mode for advanced operations.
+
+### Entering Service Mode
+
+Press `Alt+Shift+;` to enter service mode.
+
+### Service Mode Commands
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `Esc` | Reload config | Reloads `~/.aerospace.toml` and returns to main mode |
+| `r` | Reset layout | Flattens workspace tree and returns to main mode |
+| `f` | Toggle floating | Switches between floating and tiling layout |
+| `Backspace` | Close others | Closes all windows except current one |
+| `Alt+Shift+H/J/K/L` | Join windows | Joins current window with neighbor in specified direction |
+
+## Customization
+
+### Modifying Keybindings
+
+Edit `~/.aerospace.toml` and modify the `[mode.main.binding]` section:
+
+```toml
+[mode.main.binding]
+alt-h = 'focus left'
+# Change to your preferred keybinding
+```
+
+### Adjusting Gaps
+
+To add spacing between windows:
+
+```toml
+[gaps]
+inner.horizontal = 10  # Horizontal gap between windows
+inner.vertical = 10    # Vertical gap between windows
+outer.left = 10        # Left screen edge padding
+outer.right = 10       # Right screen edge padding
+outer.top = 10         # Top screen edge padding
+outer.bottom = 10      # Bottom screen edge padding
+```
+
+### Reload Configuration
+
+After making changes:
+1. Press `Alt+Shift+;` to enter service mode
+2. Press `Esc` to reload configuration
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="AeroSpace not responding to keybindings">
+    Grant Accessibility permissions:
+    1. Open System Preferences → Privacy & Security → Accessibility
+    2. Add AeroSpace to the list of allowed applications
+    3. Restart AeroSpace
+  </Accordion>
+
+  <Accordion title="Configuration changes not taking effect">
+    Reload the configuration:
+    - Press `Alt+Shift+;` then `Esc`, or
+    - Restart AeroSpace completely
+  </Accordion>
+
+  <Accordion title="Windows not tiling properly">
+    Reset the workspace layout:
+    - Press `Alt+Shift+;` to enter service mode
+    - Press `r` to flatten the workspace tree
+  </Accordion>
+</AccordionGroup>
+
+## Resources
+
+- [Official AeroSpace Documentation](https://nikitabobko.github.io/AeroSpace/)
+- [Commands Reference](https://nikitabobko.github.io/AeroSpace/commands)
+- [Guide](https://nikitabobko.github.io/AeroSpace/guide)

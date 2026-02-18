@@ -1,0 +1,513 @@
+---
+title: "Alacritty Configuration"
+description: "GPU-accelerated terminal emulator configuration with custom theme and optimal settings"
+---
+
+## Overview
+
+Alacritty is a modern, GPU-accelerated terminal emulator written in Rust. This configuration focuses on aesthetics, performance, and usability with a custom color theme, transparency effects, and optimized font settings.
+
+## Configuration File
+
+Alacritty uses TOML format for configuration:
+
+```bash
+~/.config/alacritty/alacritty.toml
+```
+
+## Complete Configuration
+
+<CodeGroup>
+```toml title="alacritty.toml"
+general.import = [
+    "~/.config/alacritty/themes/themes/coolnight.toml"
+]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"
+opacity = 0.8
+blur = true
+startup_mode = "Maximized"
+
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+```
+</CodeGroup>
+
+## Configuration Breakdown
+
+### Theme Import
+
+```toml
+general.import = [
+    "~/.config/alacritty/themes/themes/coolnight.toml"
+]
+```
+
+<Note>
+  The configuration uses an external theme file called **coolnight**, which allows easy theme switching without modifying the main config.
+</Note>
+
+**Theme Structure:**
+```bash
+~/.config/alacritty/
+├── alacritty.toml
+└── themes/
+    └── themes/
+        └── coolnight.toml  # Custom color scheme
+```
+
+### Environment Variables
+
+<Tabs>
+  <Tab title="TERM Variable">
+    ```toml
+    [env]
+    TERM = "xterm-256color"
+    ```
+    
+    Sets the terminal type for compatibility:
+    - **256 color support** - Full color palette
+    - **xterm compatibility** - Works with most applications
+    - **SSH compatibility** - Recognized by remote systems
+  </Tab>
+  
+  <Tab title="Why Not tmux-256color?">
+    Using `xterm-256color` instead of `tmux-256color` ensures:
+    - Better compatibility with remote systems
+    - No issues when SSHing to servers without tmux terminfo
+    - Applications recognize the terminal type
+    
+    Tmux handles its own terminal type separately.
+  </Tab>
+</Tabs>
+
+### Window Configuration
+
+<Accordion title="Padding">
+```toml
+[window]
+padding.x = 10
+padding.y = 10
+```
+
+**Visual breathing room:**
+- 10 pixels of horizontal padding
+- 10 pixels of vertical padding
+- Prevents text from touching window edges
+- Creates cleaner, more comfortable reading experience
+</Accordion>
+
+<Accordion title="Decorations">
+```toml
+decorations = "Buttonless"
+```
+
+**macOS-specific setting:**
+
+Options:
+- `Full` - Standard title bar with traffic lights and title
+- `Buttonless` - Title bar without buttons (cleaner look)
+- `None` - No title bar (frameless window)
+- `Transparent` - Transparent title bar
+
+<Note>
+  `Buttonless` provides a clean aesthetic while maintaining window management functionality.
+</Note>
+</Accordion>
+
+<Accordion title="Transparency & Blur">
+```toml
+opacity = 0.8
+blur = true
+```
+
+**Visual effects:**
+- **Opacity at 80%** - Slight transparency for desktop background visibility
+- **Blur enabled** - Background blur effect for better text readability
+- **Requires compositor** - Works on macOS natively
+
+<Warning>
+  High transparency (below 0.7) can reduce text readability. 0.8 provides good balance between aesthetics and usability.
+</Warning>
+</Accordion>
+
+<Accordion title="Startup Mode">
+```toml
+startup_mode = "Maximized"
+```
+
+**Window behavior:**
+
+Options:
+- `Windowed` - Normal window size
+- `Maximized` - Fills screen without fullscreen
+- `Fullscreen` - True fullscreen mode
+- `SimpleFullscreen` - macOS-specific borderless fullscreen
+
+**Maximized benefits:**
+- Maximum workspace on launch
+- Easy to un-maximize if needed
+- Maintains menu bar visibility (unlike fullscreen)
+</Accordion>
+
+### Font Configuration
+
+<CodeGroup>
+```toml title="Font Settings"
+[font]
+normal.family = "0xProto Nerd Font Mono"
+size = 16
+```
+</CodeGroup>
+
+<Tabs>
+  <Tab title="Font Family">
+    **0xProto Nerd Font Mono**
+    
+    A modern monospaced programming font with:
+    - Clean, readable characters
+    - Distinct glyphs (0/O, 1/l/I)
+    - Ligature support
+    - Full Nerd Font icon set
+    - Powerline symbols
+    - Dev icons for file types
+    
+    **Installation:**
+    ```bash
+    # macOS with Homebrew
+    brew tap homebrew/cask-fonts
+    brew install --cask font-0xproto-nerd-font
+    ```
+  </Tab>
+  
+  <Tab title="Font Size">
+    **Size: 16pt**
+    
+    Comfortable reading size for:
+    - 4K/Retina displays
+    - Extended coding sessions
+    - Pair programming presentations
+    
+    **Adjusting on the fly:**
+    - `Cmd + +` - Increase font size
+    - `Cmd + -` - Decrease font size
+    - `Cmd + 0` - Reset to configured size
+  </Tab>
+  
+  <Tab title="Font Variants">
+    You can configure different styles:
+    
+    ```toml
+    [font]
+    normal.family = "0xProto Nerd Font Mono"
+    bold.family = "0xProto Nerd Font Mono"
+    italic.family = "0xProto Nerd Font Mono"
+    bold_italic.family = "0xProto Nerd Font Mono"
+    size = 16
+    ```
+    
+    Or use different fonts for emphasis:
+    ```toml
+    normal.family = "0xProto Nerd Font Mono"
+    italic.family = "JetBrainsMono Nerd Font"
+    italic.style = "Italic"
+    ```
+  </Tab>
+</Tabs>
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="GPU Acceleration" icon="microchip">
+    Hardware-accelerated rendering for smooth scrolling and fast updates
+  </Card>
+  <Card title="Custom Theme" icon="palette">
+    Coolnight theme with carefully crafted colors for reduced eye strain
+  </Card>
+  <Card title="Nerd Font Icons" icon="icons">
+    Full icon support for file managers, status lines, and dev tools
+  </Card>
+  <Card title="Transparency" icon="eye">
+    Window blur and opacity for modern desktop integration
+  </Card>
+</CardGroup>
+
+## Customization
+
+### Changing the Theme
+
+<Steps>
+  <Step title="Find a theme">
+    Browse themes at [Alacritty Theme](https://github.com/alacritty/alacritty-theme)
+    
+    ```bash
+    git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+    ```
+  </Step>
+  
+  <Step title="Update import path">
+    Edit `alacritty.toml`:
+    
+    ```toml
+    general.import = [
+        "~/.config/alacritty/themes/themes/tokyo-night.toml"
+    ]
+    ```
+  </Step>
+  
+  <Step title="Reload config">
+    Alacritty auto-reloads on config change, or manually:
+    
+    ```bash
+    # Close and reopen, or
+    touch ~/.config/alacritty/alacritty.toml
+    ```
+  </Step>
+</Steps>
+
+### Popular Theme Alternatives
+
+<CodeGroup>
+```toml title="Dracula"
+general.import = [
+    "~/.config/alacritty/themes/themes/dracula.toml"
+]
+```
+
+```toml title="Gruvbox Dark"
+general.import = [
+    "~/.config/alacritty/themes/themes/gruvbox_dark.toml"
+]
+```
+
+```toml title="Nord"
+general.import = [
+    "~/.config/alacritty/themes/themes/nord.toml"
+]
+```
+
+```toml title="Catppuccin Mocha"
+general.import = [
+    "~/.config/alacritty/themes/themes/catppuccin-mocha.toml"
+]
+```
+</CodeGroup>
+
+### Adjusting Opacity
+
+Fine-tune transparency for your preference:
+
+```toml
+[window]
+opacity = 0.9  # Less transparent
+opacity = 0.7  # More transparent
+opacity = 1.0  # Fully opaque
+```
+
+### Custom Keybindings
+
+Add keybindings section:
+
+```toml
+[[keyboard.bindings]]
+key = "N"
+mods = "Command"
+action = "SpawnNewInstance"
+
+[[keyboard.bindings]]
+key = "Enter"
+mods = "Command"
+action = "ToggleFullscreen"
+```
+
+### Cursor Configuration
+
+```toml
+[cursor]
+style = "Block"  # Block, Beam, or Underline
+blinking = "On"
+blink_interval = 750
+
+[cursor.style]
+shape = "Block"
+blinking = "On"
+```
+
+## Installation
+
+<Steps>
+  <Step title="Install Alacritty">
+    ```bash
+    # macOS
+    brew install --cask alacritty
+    
+    # Linux (Arch)
+    pacman -S alacritty
+    
+    # Linux (Ubuntu/Debian)
+    apt install alacritty
+    ```
+  </Step>
+  
+  <Step title="Install Nerd Font">
+    ```bash
+    brew tap homebrew/cask-fonts
+    brew install --cask font-0xproto-nerd-font
+    ```
+  </Step>
+  
+  <Step title="Create config directory">
+    ```bash
+    mkdir -p ~/.config/alacritty/themes/themes
+    ```
+  </Step>
+  
+  <Step title="Copy configuration">
+    ```bash
+    cp alacritty.toml ~/.config/alacritty/
+    cp coolnight.toml ~/.config/alacritty/themes/themes/
+    ```
+  </Step>
+  
+  <Step title="Launch Alacritty">
+    Configuration loads automatically on startup
+  </Step>
+</Steps>
+
+## Performance Tips
+
+<Accordion title="Reduce Input Latency">
+```toml
+[terminal]
+osc52 = "CopyPaste"
+
+[debug]
+render_timer = false
+```
+
+Disable debugging features in production use.
+</Accordion>
+
+<Accordion title="Optimize Scrolling">
+```toml
+[scrolling]
+history = 10000  # Balance memory vs history
+multiplier = 3   # Lines per scroll
+```
+</Accordion>
+
+<Accordion title="GPU Selection (Linux)">
+```toml
+[env]
+VK_ICD_FILENAMES = "/usr/share/vulkan/icd.d/nvidia_icd.json"
+```
+
+Force specific GPU for multi-GPU systems.
+</Accordion>
+
+## Troubleshooting
+
+<Accordion title="Font Not Found">
+1. Verify font installation:
+   ```bash
+   fc-list | grep -i "0xProto"
+   ```
+
+2. Use fallback font:
+   ```toml
+   [font]
+   normal.family = "Menlo"
+   ```
+
+3. Check exact font name:
+   ```bash
+   # macOS
+   ls ~/Library/Fonts/
+   ```
+</Accordion>
+
+<Accordion title="Transparency Not Working">
+- **macOS:** Should work out of the box
+- **Linux:** Requires compositor (picom, compton)
+  ```bash
+  # Install picom
+  sudo apt install picom
+  picom &
+  ```
+- **Verify:**
+  ```toml
+  [window]
+  opacity = 1.0  # Test without transparency first
+  ```
+</Accordion>
+
+<Accordion title="Colors Look Different in Tmux">
+Ensure tmux has correct terminal settings:
+
+```bash title="~/.config/tmux/tmux.conf"
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ",xterm-256color:Tc"
+```
+</Accordion>
+
+## Advanced Configuration
+
+### Live Config Reload
+
+```toml
+[live_config_reload]
+enable = true
+```
+
+Alacritty automatically reloads when config changes.
+
+### Shell Integration
+
+```toml
+[shell]
+program = "/bin/zsh"
+args = ["-l", "-c", "tmux attach || tmux"]
+```
+
+Auto-start tmux on terminal launch.
+
+### Hints (URL Opening)
+
+```toml
+[[hints.enabled]]
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+command = "open"
+post_processing = true
+mouse.enabled = true
+```
+
+Cmd+Click to open URLs.
+
+## Default Keybindings
+
+| Keybinding | Action |
+|------------|--------|
+| `Cmd + N` | New window |
+| `Cmd + T` | New tab |
+| `Cmd + W` | Close tab |
+| `Cmd + Q` | Quit |
+| `Cmd + +` | Increase font size |
+| `Cmd + -` | Decrease font size |
+| `Cmd + 0` | Reset font size |
+| `Cmd + C` | Copy |
+| `Cmd + V` | Paste |
+| `Cmd + F` | Search (vi mode) |
+
+## Resources
+
+- [Alacritty Documentation](https://alacritty.org/)
+- [Configuration Reference](https://github.com/alacritty/alacritty/blob/master/extra/man/alacritty.5.scd)
+- [Theme Repository](https://github.com/alacritty/alacritty-theme)
+- [Nerd Fonts](https://www.nerdfonts.com/)

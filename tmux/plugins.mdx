@@ -1,0 +1,207 @@
+---
+title: "Tmux Plugins"
+description: "Plugin management with TPM and theme customization with Catppuccin"
+---
+
+## Plugin Manager (TPM)
+
+This configuration uses [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm) to manage plugins.
+
+### Installed Plugins
+
+```bash
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+
+run '~/.tmux/plugins/tpm/tpm'
+```
+
+## Installation
+
+<Steps>
+  <Step title="Clone TPM Repository">
+    Install TPM to your home directory:
+    
+    ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ```
+  </Step>
+  
+  <Step title="Reload Tmux Configuration">
+    Source your Tmux configuration file:
+    
+    ```bash
+    tmux source ~/.tmux.conf
+    ```
+    
+    Or from within Tmux:
+    ```bash
+    # Press prefix key (C-Space) then :
+    :source-file ~/.tmux.conf
+    ```
+  </Step>
+  
+  <Step title="Install Plugins">
+    Install all configured plugins using TPM:
+    
+    **Inside Tmux session:**
+    ```
+    C-Space + I
+    ```
+    
+    Press `Ctrl+Space` (prefix), then `Shift+I` (capital I)
+  </Step>
+</Steps>
+
+## TPM Keybindings
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + I` | Install new plugins |
+| `prefix + U` | Update plugins |
+| `prefix + alt + u` | Uninstall plugins not in config |
+
+<Note>
+Remember that the prefix key is `C-Space` (Ctrl+Space), not the default `C-b`.
+</Note>
+
+## Catppuccin Theme
+
+### About
+
+The configuration uses the [Catppuccin](https://github.com/dreamsofcode-io/catppuccin-tmux) theme, a pastel color scheme designed for eye comfort during long coding sessions.
+
+```bash
+set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+```
+
+### Features
+
+- **Modern aesthetic**: Soothing pastel colors
+- **High contrast**: Readable text on all backgrounds
+- **Status bar styling**: Clean and informative status line
+- **Consistent theming**: Matches Catppuccin themes in other applications
+
+### Theme Variants
+
+The Catppuccin theme comes in four flavors:
+- **Latte**: Light theme
+- **Frappe**: Soft dark theme
+- **Macchiato**: Medium dark theme
+- **Mocha**: Dark theme (default)
+
+### Customization
+
+To customize the Catppuccin theme, add configuration options before the `run` command in your `tmux.conf`:
+
+```bash
+# Example customizations
+set -g @catppuccin_flavour 'mocha' # or frappe, macchiato, latte
+set -g @catppuccin_window_status_enable "yes"
+set -g @catppuccin_window_status_icon_enable "yes"
+```
+
+<Tip>
+Restart Tmux or reload the configuration after making changes to see the updated theme.
+</Tip>
+
+## Alternative Theme
+
+The configuration includes a commented-out alternative Catppuccin plugin:
+
+```bash
+# set -g @plugin 'catppuccin/tmux'
+```
+
+This is the official Catppuccin organization plugin. You can switch to it by:
+1. Commenting out `dreamsofcode-io/catppuccin-tmux`
+2. Uncommenting `catppuccin/tmux`
+3. Running `prefix + I` to install
+
+## Adding More Plugins
+
+To add additional plugins:
+
+<Steps>
+  <Step title="Add Plugin Line">
+    Add the plugin to your `tmux.conf` before the `run` command:
+    
+    ```bash
+    set -g @plugin 'github-username/plugin-name'
+    ```
+  </Step>
+  
+  <Step title="Install Plugin">
+    Press `prefix + I` inside a Tmux session to install
+  </Step>
+  
+  <Step title="Configure Plugin">
+    Add any plugin-specific configuration options before the `run` command
+  </Step>
+</Steps>
+
+## Popular Plugin Recommendations
+
+<AccordionGroup>
+  <Accordion title="tmux-resurrect - Session Persistence">
+    Save and restore Tmux sessions across restarts
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tmux-resurrect'
+    ```
+  </Accordion>
+  
+  <Accordion title="tmux-continuum - Automatic Saving">
+    Automatically save and restore sessions
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tmux-continuum'
+    set -g @continuum-restore 'on'
+    ```
+  </Accordion>
+  
+  <Accordion title="tmux-yank - System Clipboard">
+    Copy to system clipboard in copy mode
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tmux-yank'
+    ```
+  </Accordion>
+  
+  <Accordion title="tmux-sensible - Sensible Defaults">
+    Basic tmux settings everyone can agree on
+    
+    ```bash
+    set -g @plugin 'tmux-plugins/tmux-sensible'
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<Warning>
+If plugins don't load after installation, ensure:
+- TPM is cloned to the correct directory (`~/.tmux/plugins/tpm`)
+- The `run` command is at the end of your config
+- You've pressed `prefix + I` to install plugins
+- Tmux version is 1.9 or higher
+</Warning>
+
+### Check Plugin Installation
+
+```bash
+ls -la ~/.tmux/plugins/
+```
+
+You should see directories for `tpm` and any installed plugins.
+
+### Reload Configuration
+
+If changes aren't taking effect:
+
+```bash
+tmux kill-server
+tmux
+```
+
+This completely restarts Tmux with the new configuration.

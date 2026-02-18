@@ -1,0 +1,110 @@
+---
+title: "Basic Tmux Configuration"
+description: "Core Tmux settings including terminal colors, mouse support, and window management"
+---
+
+## Overview
+
+This Tmux configuration sets up a modern, user-friendly terminal multiplexer environment with Vim-inspired keybindings, proper color support, and sensible defaults.
+
+## Terminal Settings
+
+### True Color Support
+
+The configuration enables 24-bit true color support for a better visual experience:
+
+```bash
+set-option -sa terminal-overrides ",xterm*:Tc:RGB:sitm=\E[3m:ritm=\E[23m"
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ',xterm-256color:Tc'
+```
+
+These settings ensure:
+- Full RGB color support in modern terminals
+- Proper italic text rendering
+- Compatibility with xterm-based terminals
+
+### Response Time Optimization
+
+```bash
+set-option -sg escape-time 10
+set-option -g focus-events on
+```
+
+- **escape-time**: Reduces the delay after pressing Escape to 10ms, improving responsiveness in Vim/Neovim
+- **focus-events**: Enables focus event tracking for better integration with text editors
+
+## Prefix Key Change
+
+<Warning>
+The default Tmux prefix `C-b` (Ctrl+b) has been changed to `C-Space` (Ctrl+Space) for easier access.
+</Warning>
+
+```bash
+unbind C-b
+set -g prefix C-Space
+bind C-Space send-prefix
+```
+
+**Why this change?**
+- `C-Space` is easier to press than `C-b`
+- More ergonomic for frequent Tmux users
+- Doesn't conflict with common Vim navigation keys
+
+## Window Management
+
+### Window Numbering
+
+```bash
+set -g base-index 1
+set -g renumber-windows on
+```
+
+- **base-index 1**: Windows start at 1 instead of 0, matching keyboard number row layout
+- **renumber-windows**: Automatically renumber windows when one is closed, preventing gaps
+
+## Mouse Support
+
+```bash
+set -g mouse on
+```
+
+Enables mouse support for:
+- Clicking to select windows and panes
+- Resizing panes by dragging borders
+- Scrolling through terminal history
+- Selecting text (hold Shift to bypass Tmux and use terminal selection)
+
+## Vim Integration
+
+### Vi Mode
+
+```bash
+setw -g mode-keys vi
+```
+
+Enables Vim-style keybindings in copy mode, making navigation and text selection feel natural for Vim users.
+
+See [Keybindings](/tmux/keybindings) for detailed copy mode commands.
+
+## Configuration Summary
+
+| Setting | Value | Purpose |
+|---------|-------|----------|
+| Prefix Key | `C-Space` | Main command prefix |
+| Base Index | `1` | Start window numbering at 1 |
+| Mouse Support | Enabled | Click, resize, scroll |
+| Copy Mode | Vi keys | Vim-style navigation |
+| Escape Time | 10ms | Faster key response |
+| Terminal | 256-color + true color | Full color support |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Keybindings" icon="keyboard" href="/tmux/keybindings">
+    Learn all the custom keybindings and shortcuts
+  </Card>
+  <Card title="Plugins" icon="puzzle-piece" href="/tmux/plugins">
+    Install and configure Tmux plugins
+  </Card>
+</CardGroup>

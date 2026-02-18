@@ -1,0 +1,582 @@
+---
+title: "AeroSpace Configuration"
+description: "i3-like tiling window manager for macOS with comprehensive workspace and keybinding setup"
+---
+
+## Overview
+
+AeroSpace is a powerful tiling window manager for macOS that brings i3-like functionality to the Mac. This configuration provides extensive workspace management with Vim-style navigation, multiple layout modes, and comprehensive keyboard control.
+
+## Configuration File
+
+AeroSpace uses TOML format:
+
+```bash
+~/.aerospace.toml
+```
+
+## Core Features
+
+<CardGroup cols={2}>
+  <Card title="36 Workspaces" icon="grid">
+    Numbers 1-9 plus letters A-Z for maximum organization
+  </Card>
+  <Card title="Vim Navigation" icon="keyboard">
+    hjkl-based window and layout navigation
+  </Card>
+  <Card title="Multiple Layouts" icon="window-restore">
+    Tiles, accordion, floating modes with auto-orientation
+  </Card>
+  <Card title="Service Mode" icon="gear">
+    Advanced commands for layout management and window control
+  </Card>
+</CardGroup>
+
+## Startup Configuration
+
+<Tabs>
+  <Tab title="Basic Settings">
+    ```toml
+    # Start AeroSpace at login
+    start-at-login = true
+    
+    # Commands to run after login
+    after-login-command = []
+    
+    # Commands to run after AeroSpace startup
+    after-startup-command = []
+    ```
+    
+    These can be customized to launch apps or set up workspaces:
+    ```toml
+    after-login-command = [
+        'exec-and-forget open -a "Alacritty"',
+        'exec-and-forget open -a "Firefox"'
+    ]
+    ```
+  </Tab>
+  
+  <Tab title="Normalizations">
+    ```toml
+    enable-normalization-flatten-containers = true
+    enable-normalization-opposite-orientation-for-nested-containers = true
+    ```
+    
+    **What these do:**
+    - **Flatten containers** - Simplifies container hierarchy automatically
+    - **Opposite orientation** - Nested containers use perpendicular orientation
+    
+    <Note>
+      These normalizations make the layout more predictable and easier to manage, similar to i3's behavior.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Layout Configuration
+
+<Accordion title="Default Layout">
+```toml
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+accordion-padding = 30
+```
+
+**Layout Options:**
+- **tiles** - Traditional tiling layout (default)
+- **accordion** - Focus on one window, others minimized
+
+**Orientation:**
+- **auto** - Wide monitors use horizontal, tall monitors use vertical
+- **horizontal** - Force horizontal splits
+- **vertical** - Force vertical splits
+
+**Padding:**
+- `accordion-padding = 30` - Pixel spacing in accordion mode
+- Set to `0` to disable padding
+</Accordion>
+
+## Gaps Configuration
+
+<CodeGroup>
+```toml title="No Gaps (Current Config)"
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
+```
+
+```toml title="With Gaps"
+[gaps]
+inner.horizontal = 10
+inner.vertical = 10
+outer.left = 10
+outer.bottom = 10
+outer.top = 10
+outer.right = 10
+```
+</CodeGroup>
+
+<Tabs>
+  <Tab title="Gap Types">
+    **Inner gaps:**
+    - Space between windows
+    - Separate horizontal and vertical control
+    
+    **Outer gaps:**
+    - Space between windows and screen edge
+    - Individual control for each edge
+  </Tab>
+  
+  <Tab title="Per-Monitor Gaps">
+    You can set different gaps per monitor:
+    
+    ```toml
+    [gaps]
+    outer.top = [
+        { monitor.main = 40 },        # Main monitor
+        { monitor."Dell" = 20 },      # Specific monitor
+        10                             # Default
+    ]
+    ```
+  </Tab>
+</Tabs>
+
+## Mouse Behavior
+
+```toml
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = "move-mouse window-lazy-center"
+```
+
+**Features:**
+- Mouse follows window focus
+- Cursor centers on focused window
+- Smooth workspace transitions
+
+<Note>
+  The "lazy" variants only move mouse if it's not already on the target monitor/window.
+</Note>
+
+## Keybindings
+
+### Prefix Key
+
+```toml
+key-mapping.preset = 'qwerty'
+```
+
+All keybindings use **Alt/Option** (`alt`) as the main modifier.
+
+### Window Navigation
+
+<Tabs>
+  <Tab title="Focus Movement">
+    ```toml
+    alt-h = 'focus left'
+    alt-j = 'focus down'
+    alt-k = 'focus up'
+    alt-l = 'focus right'
+    ```
+    
+    **Vim-style navigation:**
+    - `Alt + h` - Focus left
+    - `Alt + j` - Focus down
+    - `Alt + k` - Focus up
+    - `Alt + l` - Focus right
+  </Tab>
+  
+  <Tab title="Move Windows">
+    ```toml
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
+    ```
+    
+    **Move windows in direction:**
+    - `Alt + Shift + h/j/k/l`
+    - Swaps with adjacent window
+    - Creates new split if needed
+  </Tab>
+  
+  <Tab title="Resize Windows">
+    ```toml
+    alt-shift-minus = 'resize smart -50'
+    alt-shift-equal = 'resize smart +50'
+    ```
+    
+    **Smart resizing:**
+    - `Alt + Shift + -` - Shrink by 50px
+    - `Alt + Shift + =` - Grow by 50px
+    - Automatically detects resize direction
+  </Tab>
+</Tabs>
+
+### Layout Management
+
+```toml
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+```
+
+**Toggle layouts:**
+- `Alt + /` - Cycle through: tiles horizontal → tiles vertical → back
+- `Alt + ,` - Cycle through: accordion horizontal → accordion vertical → back
+
+### Workspace Navigation
+
+<Accordion title="Numeric Workspaces (1-9)">
+```toml
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+# ... through alt-9
+```
+
+**Switch to workspace:**
+- `Alt + 1-9` - Jump to workspace
+- Instant switching
+- Creates workspace if doesn't exist
+</Accordion>
+
+<Accordion title="Letter Workspaces (A-Z)">
+```toml
+alt-a = 'workspace A'
+alt-b = 'workspace B'
+alt-c = 'workspace C'
+# ... through alt-z
+```
+
+**26 additional workspaces:**
+- `Alt + letter` - Jump to workspace
+- Great for organizing by project
+- Example:
+  - `Alt + C` for Code
+  - `Alt + B` for Browser
+  - `Alt + M` for Music
+</Accordion>
+
+<Accordion title="Move Windows to Workspace">
+```toml
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+# ... includes letters too
+alt-shift-a = 'move-node-to-workspace A'
+```
+
+**Move focused window:**
+- `Alt + Shift + number/letter`
+- Window moves to target workspace
+- Focus stays on current workspace
+- To move and follow: use after moving, switch workspace
+</Accordion>
+
+### Special Workspace Commands
+
+<Tabs>
+  <Tab title="Back and Forth">
+    ```toml
+    alt-tab = 'workspace-back-and-forth'
+    ```
+    
+    **Quick workspace toggle:**
+    - `Alt + Tab` - Switch to previous workspace
+    - Like a workspace "Alt+Tab"
+    - Great for bouncing between two workspaces
+  </Tab>
+  
+  <Tab title="Move to Monitor">
+    ```toml
+    alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+    ```
+    
+    **Multi-monitor workflow:**
+    - `Alt + Shift + Tab` - Move entire workspace to next monitor
+    - Wraps around to first monitor
+    - Useful for presentations or reorganizing
+  </Tab>
+</Tabs>
+
+## Service Mode
+
+Advanced commands accessible via a mode system:
+
+```toml
+alt-shift-semicolon = 'mode service'
+```
+
+### Service Mode Commands
+
+<CodeGroup>
+```toml title="Service Mode Bindings"
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
+backspace = ['close-all-windows-but-current', 'mode main']
+
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+```
+</CodeGroup>
+
+<Tabs>
+  <Tab title="Basic Commands">
+    **Enter service mode:** `Alt + Shift + ;`
+    
+    Then:
+    - `Esc` - Reload config and exit
+    - `r` - Reset layout (flatten tree)
+    - `f` - Toggle floating/tiling
+    - `Backspace` - Close all windows except current
+  </Tab>
+  
+  <Tab title="Join Commands">
+    **In service mode:**
+    - `Alt + Shift + h` - Join with window on left
+    - `Alt + Shift + j` - Join with window below
+    - `Alt + Shift + k` - Join with window above
+    - `Alt + Shift + l` - Join with window on right
+    
+    <Note>
+      Join commands create container hierarchies, similar to i3's split modes.
+    </Note>
+  </Tab>
+  
+  <Tab title="Use Cases">
+    **Common workflows:**
+    
+    1. **Reload config after editing:**
+       - `Alt + Shift + ;` then `Esc`
+    
+    2. **Clean up messy layout:**
+       - `Alt + Shift + ;` then `r`
+    
+    3. **Make window floating:**
+       - `Alt + Shift + ;` then `f`
+    
+    4. **Focus single window:**
+       - `Alt + Shift + ;` then `Backspace`
+  </Tab>
+</Tabs>
+
+## Workspace Organization Ideas
+
+<Accordion title="By Function">
+**Organize workspaces by task type:**
+
+- `1` - Primary terminal
+- `2` - Secondary terminal
+- `3` - Web browser
+- `4` - Communication (Slack, Discord)
+- `5` - Music/Media
+- `C` - Code projects
+- `D` - Documentation
+- `M` - Monitoring tools
+- `T` - Testing/QA
+</Accordion>
+
+<Accordion title="By Project">
+**Dedicate workspaces to projects:**
+
+- `A` - Project Alpha
+- `B` - Project Beta
+- `C` - Project Charlie
+- Each project has its own workspace
+- Switch between projects instantly
+</Accordion>
+
+<Accordion title="By Monitor">
+**Multi-monitor setup:**
+
+- **Monitor 1 (Main):**
+  - `1-5` - Development workspaces
+  - `A-D` - Project workspaces
+
+- **Monitor 2 (Secondary):**
+  - `6-9` - Communication & monitoring
+  - `M` - Music
+  - `N` - Notes
+  - `V` - Video calls
+</Accordion>
+
+## Installation
+
+<Steps>
+  <Step title="Install AeroSpace">
+    ```bash
+    brew install --cask nikitabobko/tap/aerospace
+    ```
+  </Step>
+  
+  <Step title="Copy configuration">
+    ```bash
+    cp aerospace.toml ~/.aerospace.toml
+    ```
+  </Step>
+  
+  <Step title="Start AeroSpace">
+    ```bash
+    # Launch from Applications or:
+    open -a AeroSpace
+    ```
+    
+    Or enable auto-start (already in config):
+    ```toml
+    start-at-login = true
+    ```
+  </Step>
+  
+  <Step title="Grant accessibility permissions">
+    System Settings → Privacy & Security → Accessibility → Enable AeroSpace
+  </Step>
+</Steps>
+
+## Customization
+
+### Adding Custom Workspaces
+
+```toml
+# Add custom workspace names
+alt-0 = 'workspace 0'
+alt-shift-0 = 'move-node-to-workspace 0'
+```
+
+### Application-Specific Rules
+
+```toml
+[[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.googlecode.iterm2'
+run = ['move-node-to-workspace 1', 'layout tiles']
+```
+
+### Floating Windows
+
+```toml
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+if.window-title-regex-substring = 'Info'
+run = 'layout floating'
+```
+
+### Workspace-to-Monitor Assignment
+
+```toml
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'secondary'
+4 = 'secondary'
+```
+
+## Quick Reference
+
+### Essential Keybindings
+
+| Category | Key | Action |
+|----------|-----|--------|
+| **Navigation** | `Alt + h/j/k/l` | Focus window |
+| | `Alt + 1-9, A-Z` | Switch workspace |
+| | `Alt + Tab` | Previous workspace |
+| **Moving** | `Alt + Shift + h/j/k/l` | Move window |
+| | `Alt + Shift + 1-9, A-Z` | Move to workspace |
+| | `Alt + Shift + Tab` | Move workspace to monitor |
+| **Layout** | `Alt + /` | Toggle tiles layout |
+| | `Alt + ,` | Toggle accordion layout |
+| | `Alt + Shift + -/=` | Resize window |
+| **Service** | `Alt + Shift + ;` | Enter service mode |
+| | (in service) `Esc` | Reload config |
+| | (in service) `r` | Reset layout |
+| | (in service) `f` | Toggle floating |
+
+## Troubleshooting
+
+<Accordion title="Keybindings Not Working">
+1. Check accessibility permissions
+2. Reload config: `Alt + Shift + ;` then `Esc`
+3. Check for conflicts with system shortcuts:
+   - System Settings → Keyboard → Keyboard Shortcuts
+4. Verify AeroSpace is running:
+   ```bash
+   ps aux | grep -i aerospace
+   ```
+</Accordion>
+
+<Accordion title="Windows Not Tiling">
+- Some apps don't support tiling (System Preferences, some dialogs)
+- Force floating mode for problematic apps:
+  ```toml
+  [[on-window-detected]]
+  if.app-id = 'problematic.app'
+  run = 'layout floating'
+  ```
+- Find app ID:
+  ```bash
+  aerospace list-windows --all
+  ```
+</Accordion>
+
+<Accordion title="Layout Issues After Monitor Change">
+Reset layout in service mode:
+1. `Alt + Shift + ;`
+2. `r`
+
+Or restart AeroSpace:
+```bash
+killall AeroSpace && open -a AeroSpace
+```
+</Accordion>
+
+## Advanced Tips
+
+### Scratchpad Workflow
+
+```toml
+# Create scratchpad workspace
+alt-minus = 'workspace scratchpad'
+alt-shift-minus = 'move-node-to-workspace scratchpad'
+```
+
+### Dynamic Workspace Creation
+
+```toml
+# Workspaces are created on-demand
+# No need to pre-create all 36 workspaces
+# Switch to any workspace that doesn't exist yet
+```
+
+### Shell Integration
+
+Add to `.zshrc` for workspace info in prompt:
+
+```bash
+aerospace_workspace() {
+    aerospace list-workspaces --focused
+}
+
+PS1="$(aerospace_workspace) %~ $ "
+```
+
+## Resources
+
+- [AeroSpace Documentation](https://nikitabobko.github.io/AeroSpace/guide)
+- [Command Reference](https://nikitabobko.github.io/AeroSpace/commands)
+- [GitHub Repository](https://github.com/nikitabobko/AeroSpace)
+- [i3 User Guide](https://i3wm.org/docs/userguide.html) (similar concepts)

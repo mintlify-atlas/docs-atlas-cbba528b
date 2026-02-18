@@ -1,0 +1,263 @@
+---
+title: "Keybindings"
+description: "Custom keybindings and keyboard shortcuts for Neovim"
+---
+
+This Neovim configuration inherits all default LazyVim keybindings with minimal custom overrides.
+
+## Custom Keymaps
+
+The custom keymaps file is intentionally minimal, relying on LazyVim defaults:
+
+```lua ~/workspace/source/nvim/lua/config/keymaps.lua
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
+```
+
+<Tip>
+  Press `<leader>sk` in Neovim to search all available keybindings using Telescope.
+</Tip>
+
+---
+
+## LazyVim Default Keybindings
+
+This setup uses the standard LazyVim keybindings. Below are the most commonly used shortcuts.
+
+### Leader Key
+
+<Card title="Leader Key" icon="key">
+  The leader key is **Space** by default in LazyVim
+</Card>
+
+---
+
+## General Keybindings
+
+<Tabs>
+  <Tab title="File Operations">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `<leader>ff` | Find File | Search files with Telescope |
+    | `<leader>fr` | Recent Files | Open recently used files |
+    | `<leader>fb` | Find Buffer | Search open buffers |
+    | `<leader>fg` | Live Grep | Search text in project |
+    | `<leader>fn` | New File | Create a new file |
+    | `<leader>fs` | Save File | Write current buffer |
+  </Tab>
+  
+  <Tab title="Navigation">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `<C-h>` | Left Window | Move to left split |
+    | `<C-j>` | Down Window | Move to split below |
+    | `<C-k>` | Up Window | Move to split above |
+    | `<C-l>` | Right Window | Move to right split |
+    | `[b` | Previous Buffer | Switch to previous buffer |
+    | `]b` | Next Buffer | Switch to next buffer |
+    | `<leader>bb` | Buffer List | Show all buffers |
+    | `<leader>bd` | Delete Buffer | Close current buffer |
+  </Tab>
+  
+  <Tab title="Code">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `gd` | Go to Definition | Jump to symbol definition |
+    | `gr` | Go to References | Show all references |
+    | `gI` | Go to Implementation | Jump to implementation |
+    | `gy` | Go to Type Definition | Jump to type definition |
+    | `K` | Hover Documentation | Show documentation |
+    | `<leader>ca` | Code Action | Show available code actions |
+    | `<leader>cr` | Rename Symbol | Rename symbol under cursor |
+    | `<leader>cf` | Format Document | Format current file |
+    | `]d` | Next Diagnostic | Jump to next diagnostic |
+    | `[d` | Previous Diagnostic | Jump to previous diagnostic |
+  </Tab>
+  
+  <Tab title="Search">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `<leader>sg` | Grep | Search text in project |
+    | `<leader>sw` | Grep Word | Search word under cursor |
+    | `<leader>ss` | Goto Symbol | Search document symbols |
+    | `<leader>sS` | Goto Symbol (Workspace) | Search workspace symbols |
+    | `<leader>sc` | Command History | Search command history |
+    | `<leader>sk` | Keymaps | Search keymaps |
+    | `<leader>sh` | Help Tags | Search help documentation |
+  </Tab>
+  
+  <Tab title="Git">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `<leader>gg` | Lazygit | Open Lazygit |
+    | `<leader>gb` | Git Blame | Show git blame for line |
+    | `<leader>gc` | Git Commits | Browse commits |
+    | `<leader>gs` | Git Status | Show git status |
+    | `]h` | Next Hunk | Jump to next git hunk |
+    | `[h` | Previous Hunk | Jump to previous git hunk |
+    | `<leader>ghp` | Preview Hunk | Preview git hunk |
+    | `<leader>ghr` | Reset Hunk | Reset current hunk |
+  </Tab>
+  
+  <Tab title="UI">
+    | Key | Action | Description |
+    |-----|--------|-------------|
+    | `<leader>ul` | Toggle Line Numbers | Show/hide line numbers |
+    | `<leader>ur` | Toggle Relative Numbers | Toggle relative line numbers |
+    | `<leader>us` | Toggle Spelling | Enable/disable spell check |
+    | `<leader>uw` | Toggle Word Wrap | Enable/disable line wrapping |
+    | `<leader>ud` | Toggle Diagnostics | Show/hide diagnostics |
+    | `<leader>uc` | Toggle Conceal | Toggle conceallevel |
+    | `<leader>uC` | Toggle Colorscheme | Switch between light/dark |
+    | `<leader>gg` | Lazygit | Open Lazygit terminal |
+  </Tab>
+</Tabs>
+
+---
+
+## Plugin-Specific Keybindings
+
+### Completion (nvim-cmp)
+
+Custom completion keybindings from `tab-complete.lua`:
+
+<CardGroup cols={2}>
+
+<Card title="Tab Key" icon="arrow-right">
+  **Behavior**: Auto-select first completion item if none selected, then confirm
+  
+  ```lua
+  ["<Tab>"] = cmp.mapping(function(fallback)
+    if cmp.visible() then
+      local entry = cmp.get_selected_entry()
+      if not entry then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      else
+        cmp.confirm()
+      end
+    else
+      fallback()
+    end
+  end, { "i", "s" })
+  ```
+</Card>
+
+<Card title="Enter Key" icon="arrow-down">
+  **Behavior**: Abort completion and insert newline (prevents accidental completion)
+  
+  ```lua
+  ["<CR>"] = cmp.mapping(function(fallback)
+    cmp.abort()
+    fallback()
+  end, { "i", "s", "c" })
+  ```
+</Card>
+
+</CardGroup>
+
+### Obsidian
+
+When editing markdown files, Obsidian.nvim provides additional keybindings:
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `<leader>on` | New Note | Create new Obsidian note |
+| `<leader>oo` | Open Note | Open existing note |
+| `<leader>os` | Search Notes | Search in vault |
+| `<leader>ot` | Today's Note | Open daily note |
+| `gf` | Follow Link | Follow link under cursor |
+
+### LeetCode
+
+Access LeetCode features with custom commands:
+
+| Command | Description |
+|---------|-------------|
+| `:Leet` | Open LeetCode menu |
+| `:Leet list` | List all problems |
+| `:Leet test` | Run test cases |
+| `:Leet submit` | Submit solution |
+
+### Vim Be Good
+
+Launch the Vim training game:
+
+```vim
+:VimBeGood
+```
+
+---
+
+## Window Management
+
+<CardGroup cols={2}>
+
+<Card title="Split Windows" icon="window-maximize">
+  - `<leader>-` - Split window below
+  - `<leader>|` - Split window right
+  - `<leader>wd` - Delete window
+</Card>
+
+<Card title="Resize Windows" icon="up-down-left-right">
+  - `<C-Up>` - Increase height
+  - `<C-Down>` - Decrease height
+  - `<C-Left>` - Decrease width
+  - `<C-Right>` - Increase width
+</Card>
+
+</CardGroup>
+
+---
+
+## Terminal Mode
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `<C-/>` | Toggle Terminal | Open/close floating terminal |
+| `<C-_>` | Toggle Terminal | Alternative binding |
+| `<Esc><Esc>` | Exit Terminal Mode | Return to normal mode |
+| `<C-h/j/k/l>` | Navigate | Move between splits |
+
+---
+
+## Quick Reference
+
+<Accordion title="Most Used Keybindings">
+1. **File Navigation**: `<leader>ff` - Find files
+2. **Text Search**: `<leader>sg` - Grep in project
+3. **Code Actions**: `<leader>ca` - Show code actions
+4. **Go to Definition**: `gd` - Jump to definition
+5. **Terminal**: `<C-/>` - Toggle terminal
+6. **Lazy UI**: `<leader>l` - Open plugin manager
+7. **Format**: `<leader>cf` - Format current file
+8. **Git**: `<leader>gg` - Open Lazygit
+</Accordion>
+
+<Accordion title="Getting Help">
+- `<leader>sk` - Search all keymaps
+- `<leader>sh` - Search help tags
+- `:help LazyVim` - LazyVim documentation
+- `:WhichKey` - Show keybinding popup
+</Accordion>
+
+---
+
+## Adding Custom Keybindings
+
+To add your own keybindings, edit `~/workspace/source/nvim/lua/config/keymaps.lua`:
+
+```lua
+-- Example: Add custom keymap
+local map = vim.keymap.set
+
+-- Save file with Ctrl+S
+map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+
+-- Clear search highlighting
+map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
+```
+
+<Warning>
+  Make sure your custom keybindings don't conflict with LazyVim defaults. Check existing mappings with `<leader>sk`.
+</Warning>

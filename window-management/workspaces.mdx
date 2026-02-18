@@ -1,0 +1,359 @@
+---
+title: 'Workspaces'
+description: 'Understanding and using workspaces in AeroSpace'
+---
+
+# Workspaces
+
+Workspaces in AeroSpace provide virtual desktops for organizing your windows. You have access to 35 workspaces: 9 numbered (1-9) and 26 lettered (A-Z).
+
+## Workspace Overview
+
+### Available Workspaces
+
+<CardGroup cols={2}>
+  <Card title="Numbered Workspaces" icon="hashtag">
+    **Workspaces 1-9**
+    
+    Quick access using `Alt+[1-9]`
+    
+    Ideal for frequently used applications
+  </Card>
+  
+  <Card title="Lettered Workspaces" icon="font">
+    **Workspaces A-Z** (excluding H, J, K, L)
+    
+    31 additional workspaces for specialized tasks
+    
+    Press `Alt+[letter]` to switch
+  </Card>
+</CardGroup>
+
+<Note>
+Workspaces H, J, K, and L are not available because those keys are reserved for focus navigation (left, down, up, right).
+</Note>
+
+## Switching Workspaces
+
+### Number Workspaces (1-9)
+
+The numbered workspaces are easily accessible and perfect for your most-used applications:
+
+```
+Alt+1 → Workspace 1
+Alt+2 → Workspace 2
+Alt+3 → Workspace 3
+...
+Alt+9 → Workspace 9
+```
+
+### Letter Workspaces (A-Z)
+
+Letter workspaces provide additional organization:
+
+<Tabs>
+  <Tab title="Available Letters">
+    ```
+    Alt+A → Workspace A    Alt+N → Workspace N
+    Alt+B → Workspace B    Alt+O → Workspace O
+    Alt+C → Workspace C    Alt+P → Workspace P
+    Alt+D → Workspace D    Alt+Q → Workspace Q
+    Alt+E → Workspace E    Alt+R → Workspace R
+    Alt+F → Workspace F    Alt+S → Workspace S
+    Alt+G → Workspace G    Alt+T → Workspace T
+    Alt+I → Workspace I    Alt+U → Workspace U
+    Alt+M → Workspace M    Alt+V → Workspace V
+                           Alt+W → Workspace W
+                           Alt+X → Workspace X
+                           Alt+Y → Workspace Y
+                           Alt+Z → Workspace Z
+    ```
+  </Tab>
+  
+  <Tab title="Reserved Letters">
+    The following letters are **not available** as workspaces:
+    
+    - **H**: Focus left (`Alt+H`)
+    - **J**: Focus down (`Alt+J`)
+    - **K**: Focus up (`Alt+K`)
+    - **L**: Focus right (`Alt+L`)
+    
+    These keys are used for vim-style window navigation.
+  </Tab>
+</Tabs>
+
+## Moving Windows Between Workspaces
+
+### Basic Window Movement
+
+Move the currently focused window to any workspace by adding `Shift` to the workspace keybinding:
+
+```
+Alt+Shift+1 → Move window to workspace 1
+Alt+Shift+2 → Move window to workspace 2
+Alt+Shift+A → Move window to workspace A
+Alt+Shift+B → Move window to workspace B
+```
+
+<Steps>
+  <Step title="Focus the window">
+    Use `Alt+H/J/K/L` to focus the window you want to move.
+  </Step>
+  
+  <Step title="Move to workspace">
+    Press `Alt+Shift+[workspace]` where `[workspace]` is the target workspace number or letter.
+  </Step>
+  
+  <Step title="Follow (optional)">
+    If you want to follow the window to the new workspace, press `Alt+[workspace]` immediately after.
+  </Step>
+</Steps>
+
+### Quick Workspace Switching
+
+| Command | Action | Use Case |
+|---------|--------|----------|
+| `Alt+Tab` | Switch to previous workspace | Quickly toggle between two workspaces |
+| `Alt+[workspace]` | Switch to specific workspace | Jump directly to a workspace |
+| `Alt+Shift+Tab` | Move workspace to next monitor | Useful in multi-monitor setups |
+
+## Workspace Organization Strategies
+
+### By Application Type
+
+Organize workspaces based on application categories:
+
+<AccordionGroup>
+  <Accordion title="Development Setup">
+    - **Workspace 1**: Code editor (VS Code, Neovim)
+    - **Workspace 2**: Terminal windows
+    - **Workspace 3**: Browser with documentation
+    - **Workspace 4**: Database tools / API clients
+  </Accordion>
+
+  <Accordion title="Communication Setup">
+    - **Workspace C**: Chat applications (Slack, Discord)
+    - **Workspace E**: Email client
+    - **Workspace M**: Calendar and meetings
+  </Accordion>
+
+  <Accordion title="Content Creation">
+    - **Workspace D**: Design tools (Figma, Sketch)
+    - **Workspace V**: Video editing
+    - **Workspace P**: Photo editing
+  </Accordion>
+
+  <Accordion title="Research & Writing">
+    - **Workspace B**: Browser for research
+    - **Workspace W**: Writing application (Notion, Obsidian)
+    - **Workspace N**: Notes and references
+  </Accordion>
+</AccordionGroup>
+
+### By Project
+
+Dedicate workspace ranges to different projects:
+
+```
+Project A:
+  - Workspace 1-3: Code, terminal, browser
+  - Workspace A: Additional tools
+
+Project B:
+  - Workspace 4-6: Code, terminal, browser
+  - Workspace B: Additional tools
+
+Personal:
+  - Workspace 7-9: Personal applications
+```
+
+### By Context
+
+Organize based on work context:
+
+<CardGroup cols={2}>
+  <Card title="Focus Work" icon="bullseye">
+    **Workspaces 1-3**
+    
+    Deep work applications with minimal distractions
+  </Card>
+  
+  <Card title="Communication" icon="comments">
+    **Workspaces 4-5**
+    
+    Email, chat, video calls
+  </Card>
+  
+  <Card title="Reference" icon="book">
+    **Workspaces 6-7**
+    
+    Documentation, research, notes
+  </Card>
+  
+  <Card title="Utilities" icon="wrench">
+    **Workspaces 8-9**
+    
+    System monitors, file managers, utilities
+  </Card>
+</CardGroup>
+
+## Multi-Monitor Workspaces
+
+### Workspace-Monitor Assignment
+
+Workspaces can be moved between monitors:
+
+```bash
+# Move current workspace to next monitor
+Alt+Shift+Tab
+```
+
+This command wraps around, so if you're on the last monitor, it moves to the first.
+
+### Multi-Monitor Strategy
+
+<Steps>
+  <Step title="Assign primary workspaces">
+    Keep frequently used workspaces (1-3) on your primary monitor.
+  </Step>
+  
+  <Step title="Use secondary for context">
+    Move reference workspaces (documentation, communication) to secondary monitor.
+  </Step>
+  
+  <Step title="Quick workspace moves">
+    Use `Alt+Shift+Tab` to quickly reorganize workspace layout across monitors.
+  </Step>
+</Steps>
+
+## Workspace Management
+
+### Viewing Workspace State
+
+AeroSpace doesn't have a built-in workspace indicator, but you can:
+
+1. Use the macOS menu bar to see the current workspace
+2. Integrate with status bars like [SketchyBar](https://github.com/FelixKratz/SketchyBar)
+3. Simply remember based on application context
+
+### Cleaning Up Workspaces
+
+<AccordionGroup>
+  <Accordion title="Close All But Current Window">
+    **In service mode:**
+    
+    1. Press `Alt+Shift+;` to enter service mode
+    2. Press `Backspace` to close all windows except current
+    3. Returns to main mode automatically
+    
+    Useful for quickly cleaning up a cluttered workspace.
+  </Accordion>
+
+  <Accordion title="Reset Workspace Layout">
+    **In service mode:**
+    
+    1. Press `Alt+Shift+;` to enter service mode
+    2. Press `r` to flatten the workspace tree
+    3. Returns to main mode automatically
+    
+    Resets the layout structure without closing windows.
+  </Accordion>
+
+  <Accordion title="Move Windows Out">
+    Manually move windows to other workspaces:
+    
+    1. Focus window with `Alt+H/J/K/L`
+    2. Press `Alt+Shift+[workspace]` to move it
+    3. Repeat for each window
+  </Accordion>
+</AccordionGroup>
+
+## Workflow Examples
+
+### Example 1: Developer Workflow
+
+<Steps>
+  <Step title="Setup workspaces">
+    - **Workspace 1**: Code editor with project files
+    - **Workspace 2**: Multiple terminal windows
+    - **Workspace 3**: Browser with localhost
+    - **Workspace D**: Documentation browser
+  </Step>
+  
+  <Step title="Working flow">
+    - Edit code in workspace 1
+    - Press `Alt+2` to check terminal output
+    - Press `Alt+3` to view app in browser
+    - Press `Alt+D` for documentation reference
+    - Press `Alt+Tab` to return to previous workspace
+  </Step>
+</Steps>
+
+### Example 2: Research & Writing
+
+<Steps>
+  <Step title="Setup workspaces">
+    - **Workspace W**: Writing application (main)
+    - **Workspace B**: Multiple browser windows for research
+    - **Workspace N**: Note-taking app
+    - **Workspace R**: Reference PDFs
+  </Step>
+  
+  <Step title="Working flow">
+    - Write in workspace W
+    - Press `Alt+B` to research
+    - Press `Alt+N` to take quick notes
+    - Press `Alt+Tab` to jump back to writing
+  </Step>
+</Steps>
+
+### Example 3: Multi-Project Management
+
+<Steps>
+  <Step title="Project A (Workspaces 1-3)">
+    - Workspace 1: Editor
+    - Workspace 2: Terminal
+    - Workspace 3: Browser
+  </Step>
+  
+  <Step title="Project B (Workspaces 4-6)">
+    - Workspace 4: Editor
+    - Workspace 5: Terminal
+    - Workspace 6: Browser
+  </Step>
+  
+  <Step title="Shared (Workspaces 7-9)">
+    - Workspace 7: Communication (Slack)
+    - Workspace 8: Email
+    - Workspace 9: Music/Background apps
+  </Step>
+  
+  <Step title="Context switching">
+    Jump between projects by switching workspace ranges:
+    - `Alt+1` through `Alt+3` for Project A
+    - `Alt+4` through `Alt+6` for Project B
+    - `Alt+7` through `Alt+9` for shared tools
+  </Step>
+</Steps>
+
+## Tips & Best Practices
+
+<Tip>
+**Keep it simple**: Start with just 3-5 workspaces and expand as needed. Too many workspaces can be as confusing as too few.
+</Tip>
+
+<Tip>
+**Use memorable mappings**: Map workspaces to application initials (e.g., workspace C for Chat, workspace M for Mail).
+</Tip>
+
+<Tip>
+**Leverage Alt+Tab**: The back-and-forth command is one of the most powerful features. Use it to quickly toggle between two contexts.
+</Tip>
+
+<Tip>
+**Empty workspaces are fine**: Don't feel obligated to use all 35 workspaces. Empty workspaces consume no resources.
+</Tip>
+
+<Warning>
+Workspaces are created on-demand. If you switch to a workspace with no windows, you'll see an empty desktop. Press your application launcher keybinding or switch to another workspace.
+</Warning>

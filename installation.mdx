@@ -1,0 +1,441 @@
+---
+title: "Installation Guide"
+description: "Step-by-step instructions to set up your complete development environment"
+---
+
+## Prerequisites
+
+Before installing the configurations, ensure you have the following:
+
+<CardGroup cols={2}>
+  <Card title="macOS" icon="apple">
+    AeroSpace window manager requires macOS. Other tools work on Linux/Windows.
+  </Card>
+  <Card title="Homebrew" icon="beer-mug-empty">
+    Package manager for macOS. Install from [brew.sh](https://brew.sh)
+  </Card>
+  <Card title="Git" icon="git-alt">
+    For cloning the repository and version control.
+  </Card>
+  <Card title="Terminal Access" icon="terminal">
+    Basic familiarity with command-line operations.
+  </Card>
+</CardGroup>
+
+## Installation Process
+
+<Steps>
+  <Step title="Clone the Repository">
+    First, clone the configurations repository to your home directory:
+
+    ```bash
+    cd ~
+    git clone https://github.com/yangleyland/configs.git
+    cd configs
+    ```
+
+    This will create a `configs` directory containing all configuration files.
+  </Step>
+
+  <Step title="Install Required Tools">
+    Install all the necessary applications using Homebrew:
+
+    ```bash
+    # Install Neovim
+    brew install neovim
+
+    # Install Tmux
+    brew install tmux
+
+    # Install Alacritty terminal
+    brew install --cask alacritty
+
+    # Install AeroSpace window manager
+    brew install --cask nikitabobko/tap/aerospace
+
+    # Install Git (if not already installed)
+    brew install git
+    ```
+
+    <Note>
+      These tools can be installed independently. You don't need all of them to use individual configurations.
+    </Note>
+  </Step>
+
+  <Step title="Install Nerd Font">
+    The configuration uses **0xProto Nerd Font** for proper icon rendering:
+
+    ```bash
+    brew tap homebrew/cask-fonts
+    brew install --cask font-0xproto-nerd-font
+    ```
+
+    <Tip>
+      Nerd Fonts include programming ligatures and icons used by terminal applications and Neovim plugins.
+    </Tip>
+  </Step>
+
+  <Step title="Set Up Neovim">
+    Create symlinks for Neovim configuration:
+
+    ```bash
+    # Backup existing config if you have one
+    mv ~/.config/nvim ~/.config/nvim.backup
+
+    # Create symlink to the new config
+    ln -s ~/configs/nvim ~/.config/nvim
+    ```
+
+    Install LazyVim and plugins:
+
+    ```bash
+    # Launch Neovim - plugins will auto-install
+    nvim
+    ```
+
+    On first launch, LazyVim will automatically:
+    - Install the Lazy plugin manager
+    - Download all configured plugins
+    - Set up LSP servers and treesitter parsers
+
+    <Warning>
+      The first launch may take a few minutes as all plugins download and compile.
+    </Warning>
+
+    ### Installed Plugins
+
+    The configuration includes these custom plugins:
+
+    ```lua nvim/lua/plugins/colorscheme.lua
+    return {
+      { "rebelot/kanagawa.nvim" },
+      { "NLKNguyen/papercolor-theme" },
+      { "ellisonleao/gruvbox.nvim" },
+      { "rose-pine/neovim" },
+      { "tiagovla/tokyodark.nvim" },
+      { "sainnhe/everforest" },
+      {
+        "navarasu/onedark.nvim",
+        opts = {
+          highlights = {
+            Visual = { bg = "#ffff00" },
+          },
+        },
+      },
+      {
+        "LazyVim/LazyVim",
+        opts = {
+          colorscheme = "onedark",
+        },
+      },
+    }
+    ```
+
+    Additional specialized plugins:
+    - **obsidian.nvim** - For Obsidian note-taking integration
+    - **leetcode.nvim** - Practice LeetCode problems in Neovim
+  </Step>
+
+  <Step title="Set Up Tmux">
+    Create symlink for Tmux configuration:
+
+    ```bash
+    # Backup existing config
+    mv ~/.tmux.conf ~/.tmux.conf.backup
+
+    # Symlink the new config
+    ln -s ~/configs/tmux/tmux.conf ~/.tmux.conf
+    ```
+
+    Install Tmux Plugin Manager (TPM):
+
+    ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ```
+
+    Start Tmux and install plugins:
+
+    ```bash
+    # Start tmux
+    tmux
+
+    # Inside tmux, press: Ctrl-Space + I (capital i)
+    # This installs all plugins including Catppuccin theme
+    ```
+
+    <Note>
+      The prefix key is changed from default `Ctrl-b` to `Ctrl-Space` for ergonomics.
+    </Note>
+
+    ### Key Configuration Features
+
+    ```bash tmux/tmux.conf
+    # Vim keybindings in copy mode
+    setw -g mode-keys vi
+
+    # Custom prefix
+    set -g prefix C-Space
+
+    # Mouse support
+    set -g mouse on
+
+    # Catppuccin theme
+    set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+    ```
+  </Step>
+
+  <Step title="Set Up Alacritty">
+    Create the Alacritty config directory and symlink:
+
+    ```bash
+    # Create config directory if it doesn't exist
+    mkdir -p ~/.config/alacritty
+
+    # Backup existing config
+    mv ~/.config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml.backup
+
+    # Symlink the new config
+    ln -s ~/configs/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+
+    # Symlink themes directory
+    ln -s ~/configs/alacritty/themes ~/.config/alacritty/themes
+    ```
+
+    Launch Alacritty to test:
+
+    ```bash
+    open -a Alacritty
+    ```
+
+    <Tip>
+      The configuration includes **151 theme presets**. Change themes by editing the import line in `alacritty.toml`.
+    </Tip>
+
+    ### Default Configuration
+
+    ```toml alacritty/alacritty.toml
+    # Import coolnight theme
+    general.import = [
+        "~/.config/alacritty/themes/themes/coolnight.toml"
+    ]
+
+    [env]
+    TERM = "xterm-256color"
+
+    [window]
+    padding.x = 10
+    padding.y = 10
+    decorations = "Buttonless"
+    opacity = 0.8
+    blur = true
+    startup_mode = "Maximized"
+
+    [font]
+    normal.family = "0xProto Nerd Font Mono"
+    size = 16
+    ```
+  </Step>
+
+  <Step title="Set Up AeroSpace">
+    Copy the AeroSpace configuration:
+
+    ```bash
+    # Copy config to home directory
+    cp ~/configs/aerospace/aerospace.toml ~/.aerospace.toml
+    ```
+
+    Launch AeroSpace:
+
+    ```bash
+    # AeroSpace will start automatically on login
+    # Or launch manually:
+    open -a AeroSpace
+    ```
+
+    <Note>
+      AeroSpace is set to `start-at-login = true` in the configuration.
+    </Note>
+
+    ### Essential Keybindings
+
+    The configuration uses Vim-style navigation:
+
+    | Keybinding | Action |
+    |------------|--------|
+    | `Alt+h/j/k/l` | Focus window left/down/up/right |
+    | `Alt+Shift+h/j/k/l` | Move window left/down/up/right |
+    | `Alt+1-9` | Switch to workspace 1-9 |
+    | `Alt+Shift+1-9` | Move window to workspace 1-9 |
+    | `Alt+/` | Toggle layout (horizontal/vertical) |
+    | `Alt+Tab` | Workspace back and forth |
+
+    <Tip>
+      AeroSpace also supports letter workspaces (A-Z) for organizing different project contexts.
+    </Tip>
+  </Step>
+
+  <Step title="Verify Installation">
+    Check that everything is working:
+
+    ```bash
+    # Check Neovim version
+    nvim --version
+
+    # Check Tmux version
+    tmux -V
+
+    # Check Alacritty version
+    alacritty --version
+
+    # List AeroSpace workspaces
+    aerospace list-workspaces --all
+    ```
+
+    <Success>
+      If all commands return version information without errors, your installation is complete!
+    </Success>
+  </Step>
+</Steps>
+
+## Post-Installation Configuration
+
+### Customize Neovim Colorscheme
+
+The default colorscheme is OneDark. To change it, edit `nvim/lua/plugins/colorscheme.lua`:
+
+```lua
+{
+  "LazyVim/LazyVim",
+  opts = {
+    colorscheme = "kanagawa",  -- or gruvbox, rose-pine, etc.
+  },
+}
+```
+
+### Change Alacritty Theme
+
+Browse available themes in `~/.config/alacritty/themes/themes/` and update the import:
+
+```toml
+general.import = [
+    "~/.config/alacritty/themes/themes/catppuccin_mocha.toml"
+]
+```
+
+Popular themes include:
+- `catppuccin_mocha.toml`
+- `gruvbox.toml`
+- `tokyonight.toml`
+- `nord.toml`
+
+### Configure Obsidian Integration
+
+If you use Obsidian for note-taking, update the workspace path in `nvim/lua/plugins/obsidian.lua`:
+
+```lua
+workspaces = {
+  {
+    name = "personal",
+    path = "/path/to/your/obsidian/vault",
+  },
+},
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Neovim plugins not installing" icon="exclamation-triangle">
+    Try manually triggering the installation:
+
+    ```bash
+    nvim
+    # Then type:
+    :Lazy sync
+    ```
+
+    If issues persist, check the Lazy log:
+
+    ```bash
+    :Lazy log
+    ```
+  </Accordion>
+
+  <Accordion title="Tmux theme not loading" icon="palette">
+    Ensure TPM is installed and plugins are loaded:
+
+    ```bash
+    # Inside tmux
+    Ctrl-Space + I  # Install plugins
+    Ctrl-Space + U  # Update plugins
+    ```
+
+    You may need to source the config:
+
+    ```bash
+    tmux source-file ~/.tmux.conf
+    ```
+  </Accordion>
+
+  <Accordion title="AeroSpace not starting" icon="window-maximize">
+    Check AeroSpace logs for errors:
+
+    ```bash
+    tail -f ~/Library/Logs/AeroSpace/aerospace.log
+    ```
+
+    Ensure you've granted Accessibility permissions:
+    - **System Settings** > **Privacy & Security** > **Accessibility**
+    - Enable AeroSpace
+  </Accordion>
+
+  <Accordion title="Font icons not displaying" icon="font">
+    Verify the Nerd Font is installed:
+
+    ```bash
+    fc-list | grep "0xProto"
+    ```
+
+    If not found, reinstall:
+
+    ```bash
+    brew reinstall font-0xproto-nerd-font
+    ```
+
+    Make sure Alacritty is using the correct font in `alacritty.toml`.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+Now that your environment is set up, explore the individual configuration guides:
+
+<CardGroup cols={2}>
+  <Card
+    title="Neovim Configuration"
+    icon="code"
+    href="/configs/neovim"
+  >
+    Deep dive into Neovim setup, plugins, and customization
+  </Card>
+  <Card
+    title="Tmux Configuration"
+    icon="window-restore"
+    href="/configs/tmux"
+  >
+    Learn about Tmux configuration and keybindings
+  </Card>
+  <Card
+    title="Alacritty Themes"
+    icon="palette"
+    href="/terminal/themes"
+  >
+    Explore 150+ terminal themes and how to switch between them
+  </Card>
+  <Card
+    title="AeroSpace Keybindings"
+    icon="keyboard"
+    href="/window-management/keybindings"
+  >
+    Master window management with Vim-style navigation
+  </Card>
+</CardGroup>

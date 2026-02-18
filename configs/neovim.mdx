@@ -1,0 +1,349 @@
+---
+title: "Neovim Configuration"
+description: "Complete Neovim setup powered by LazyVim with custom plugins and configurations"
+---
+
+## Overview
+
+This Neovim configuration is built on top of [LazyVim](https://www.lazyvim.org/), a modern Neovim distribution that provides sensible defaults and a plugin management system using [lazy.nvim](https://github.com/folke/lazy.nvim).
+
+## Directory Structure
+
+```
+nvim/
+├── init.lua                 # Entry point
+├── lua/
+│   ├── config/
+│   │   ├── autocmds.lua    # Auto commands
+│   │   ├── keymaps.lua     # Key mappings
+│   │   ├── lazy.lua        # Lazy.nvim setup
+│   │   └── options.lua     # Vim options
+│   └── plugins/            # Plugin configurations
+│       ├── colorscheme.lua
+│       ├── leetcode.lua
+│       ├── obsidian.lua
+│       ├── tab-complete.lua
+│       └── ...
+└── lazy-lock.json          # Plugin version lock file
+```
+
+## Core Configuration
+
+### Entry Point
+
+The configuration starts with a minimal `init.lua`:
+
+```lua title="init.lua"
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
+```
+
+### Plugin Manager Setup
+
+Lazy.nvim is configured to automatically bootstrap itself and load LazyVim:
+
+<CodeGroup>
+```lua title="lua/config/lazy.lua" {17-23}
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  spec = {
+    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    { import = "plugins" },
+  },
+  defaults = { lazy = false, version = false },
+  checker = { enabled = true, notify = false },
+})
+```
+</CodeGroup>
+
+### Options
+
+Custom Vim options are configured in `lua/config/options.lua`:
+
+```lua title="lua/config/options.lua"
+-- Set root directory to current working directory
+vim.g.root_spec = { "cwd" }
+```
+
+<Note>
+  LazyVim provides extensive default options. See the [LazyVim options documentation](https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua) for the full list.
+</Note>
+
+## Plugin Configurations
+
+### Color Schemes
+
+Multiple color schemes are available with OneDark set as default:
+
+<Accordion title="Color Scheme Configuration">
+```lua title="lua/plugins/colorscheme.lua"
+return {
+  { "rebelot/kanagawa.nvim" },
+  { "NLKNguyen/papercolor-theme" },
+  { "ellisonleao/gruvbox.nvim" },
+  { "rose-pine/neovim" },
+  { "tiagovla/tokyodark.nvim" },
+  { "sainnhe/everforest" },
+  {
+    "navarasu/onedark.nvim",
+    opts = {
+      highlights = {
+        Visual = { bg = "#ffff00" },
+      },
+    },
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "onedark",
+    },
+  },
+}
+```
+
+Available themes:
+- **OneDark** (default) - Atom's iconic One Dark theme
+- **Kanagawa** - Dark color scheme inspired by famous painting
+- **Gruvbox** - Retro groove color scheme
+- **Rose Pine** - Soho vibes for Neovim
+- **TokyoDark** - Clean dark theme
+- **Everforest** - Comfortable & pleasant color scheme
+</Accordion>
+
+### Obsidian Integration
+
+Seamless integration with Obsidian for note-taking:
+
+<CodeGroup>
+```lua title="lua/plugins/obsidian.lua"
+return {
+  "epwalsh/obsidian.nvim",
+  version = "*",
+  lazy = true,
+  ft = "markdown",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "hrsh7th/nvim-cmp",
+  },
+  opts = {
+    workspaces = {
+      {
+        name = "personal",
+        path = "/Users/leylandyang/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sharedvault",
+      },
+    },
+    completion = {
+      nvim_cmp = true,
+      min_chars = 2,
+    },
+    new_notes_location = "notes_subdir",
+    daily_notes = {
+      folder = "/daily notes",
+      date_format = "%m-%d-%Y",
+      alias_format = "%B %-d, %Y",
+      default_tags = { "daily-notes" },
+    },
+  },
+}
+```
+</CodeGroup>
+
+**Features:**
+- Markdown file type integration
+- nvim-cmp completion support
+- Daily notes with custom formatting
+- Workspace configuration for vault location
+
+### LeetCode Plugin
+
+Practice coding problems directly in Neovim:
+
+```lua title="lua/plugins/leetcode.lua"
+return {
+  "kawre/leetcode.nvim",
+  build = ":TSUpdate html",
+  dependencies = {
+    "nvim-telescope/telescope.nvim",
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+  },
+  opts = {
+    lang = "python3",
+  },
+}
+```
+
+### Tab Completion
+
+Custom tab completion behavior using nvim-cmp:
+
+<Accordion title="Tab Completion Setup">
+```lua title="lua/plugins/tab-complete.lua"
+return {
+  {
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-emoji",
+    },
+    opts = function(_, opts)
+      local cmp = require("cmp")
+      
+      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            local entry = cmp.get_selected_entry()
+            if not entry then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              cmp.confirm()
+            end
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<CR>"] = cmp.mapping(function(fallback)
+          cmp.abort()
+          fallback()
+        end, { "i", "s", "c" }),
+      })
+    end,
+  },
+}
+```
+
+**Behavior:**
+- `<Tab>` confirms completion or selects next item
+- `<CR>` (Enter) aborts completion and inserts newline
+- Emoji completion support
+</Accordion>
+
+## Key Features
+
+<Tabs>
+  <Tab title="LazyVim Base">
+    The configuration inherits all LazyVim features:
+    
+    - Pre-configured LSP support
+    - Treesitter syntax highlighting
+    - Telescope fuzzy finder
+    - Which-key for keybinding discovery
+    - Git integration with lazygit
+    - File explorer with neo-tree
+    - Status line and bufferline
+    - And much more...
+  </Tab>
+  
+  <Tab title="Custom Plugins">
+    Additional plugins extend functionality:
+    
+    - **Obsidian.nvim** - Note-taking integration
+    - **LeetCode.nvim** - Coding practice
+    - **Multiple Color Schemes** - Visual customization
+    - **Custom Tab Completion** - Enhanced workflow
+  </Tab>
+  
+  <Tab title="Performance">
+    Optimizations for fast startup:
+    
+    - Lazy loading for most plugins
+    - Disabled unnecessary runtime plugins (gzip, tar, zip)
+    - Automatic plugin update checking
+    - Git filter for faster cloning
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Steps>
+  <Step title="Backup existing config">
+    ```bash
+    mv ~/.config/nvim ~/.config/nvim.backup
+    mv ~/.local/share/nvim ~/.local/share/nvim.backup
+    ```
+  </Step>
+  
+  <Step title="Clone configuration">
+    ```bash
+    git clone <your-repo> ~/.config/nvim
+    ```
+  </Step>
+  
+  <Step title="Start Neovim">
+    ```bash
+    nvim
+    ```
+    
+    Lazy.nvim will automatically install all plugins on first launch.
+  </Step>
+</Steps>
+
+## Customization
+
+### Adding Plugins
+
+Create a new file in `lua/plugins/` with your plugin configuration:
+
+```lua title="lua/plugins/my-plugin.lua"
+return {
+  "author/plugin-name",
+  opts = {
+    -- your options
+  },
+}
+```
+
+### Modifying Keymaps
+
+Add custom keymaps in `lua/config/keymaps.lua`:
+
+```lua title="lua/config/keymaps.lua"
+-- Example custom keymap
+vim.keymap.set("n", "<leader>xx", ":YourCommand<CR>")
+```
+
+### Changing Color Scheme
+
+Edit the colorscheme setting in `lua/plugins/colorscheme.lua`:
+
+```lua
+{
+  "LazyVim/LazyVim",
+  opts = {
+    colorscheme = "gruvbox", -- Change to your preferred theme
+  },
+}
+```
+
+## Related Documentation
+
+- [LazyVim Documentation](https://www.lazyvim.org/)
+- [lazy.nvim Plugin Manager](https://github.com/folke/lazy.nvim)
+- [Neovim Documentation](https://neovim.io/doc/)
+
+## File Locations
+
+- Configuration: `~/.config/nvim/`
+- Data directory: `~/.local/share/nvim/`
+- Plugin installation: `~/.local/share/nvim/lazy/`
+- State files: `~/.local/state/nvim/`

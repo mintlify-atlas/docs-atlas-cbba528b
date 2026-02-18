@@ -1,0 +1,546 @@
+---
+title: Personalization
+description: Make the setup truly yours by customizing keybindings, plugins, and settings
+---
+
+This guide shows you how to personalize your development environment beyond themes and fonts.
+
+## Adding Neovim Plugins
+
+LazyVim makes it easy to add new plugins. All plugin files in `nvim/lua/plugins/` are automatically loaded.
+
+### Plugin File Structure
+
+Your configuration already includes several custom plugins:
+
+- `nvim/lua/plugins/colorscheme.lua:1` - Color scheme plugins
+- `nvim/lua/plugins/obsidian.lua:1` - Obsidian note-taking integration
+- `nvim/lua/plugins/leetcode.lua` - LeetCode practice plugin
+- `nvim/lua/plugins/vimbegood.lua` - Vim practice game
+- `nvim/lua/plugins/snacks-config.lua` - Snacks.nvim configuration
+
+### Adding a New Plugin
+
+<Steps>
+  <Step title="Create a new plugin file">
+    Create a new file in `nvim/lua/plugins/` with a descriptive name:
+    
+    ```bash
+    touch ~/.config/nvim/lua/plugins/my-plugin.lua
+    ```
+  </Step>
+  
+  <Step title="Add the plugin specification">
+    Use the Lazy.nvim plugin format. Here's a basic example:
+    
+    ```lua
+    return {
+      "author/plugin-name",
+      -- Optional: load only for specific filetypes
+      ft = { "python", "javascript" },
+      -- Optional: lazy load on command
+      cmd = { "PluginCommand" },
+      -- Optional: lazy load on keymap
+      keys = {
+        { "<leader>mp", "<cmd>PluginCommand<cr>", desc = "My Plugin" },
+      },
+      -- Plugin configuration
+      opts = {
+        -- Your plugin options here
+      },
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Neovim">
+    Close and reopen Neovim. Lazy.nvim will automatically:
+    - Detect the new plugin file
+    - Download and install the plugin
+    - Load it according to your specifications
+  </Step>
+</Steps>
+
+### Real Examples from Your Config
+
+<Tabs>
+  <Tab title="Obsidian Plugin">
+    From `nvim/lua/plugins/obsidian.lua:1`:
+    
+    ```lua
+    return {
+      "epwalsh/obsidian.nvim",
+      version = "*",
+      lazy = true,
+      ft = "markdown",  -- Only load for markdown files
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "hrsh7th/nvim-cmp",
+      },
+      opts = {
+        workspaces = {
+          {
+            name = "personal",
+            path = "~/Documents/Vault",
+          },
+        },
+        completion = {
+          nvim_cmp = true,
+          min_chars = 2,
+        },
+      },
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Simple Plugin">
+    From `nvim/lua/plugins/colorscheme.lua:2`:
+    
+    ```lua
+    return {
+      { "rebelot/kanagawa.nvim" },
+      { "ellisonleao/gruvbox.nvim" },
+      { "rose-pine/neovim" },
+    }
+    ```
+    
+    Multiple simple plugins in one file.
+  </Tab>
+  
+  <Tab title="Plugin with Custom Config">
+    From `nvim/lua/plugins/colorscheme.lua:9`:
+    
+    ```lua
+    return {
+      {
+        "navarasu/onedark.nvim",
+        opts = {
+          highlights = {
+            Visual = { bg = "#ffff00" },
+          },
+        },
+      },
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Overriding LazyVim Plugins
+
+You can modify or disable default LazyVim plugins. See `nvim/lua/plugins/example.lua:1` for comprehensive examples:
+
+<Tabs>
+  <Tab title="Modify Plugin Options">
+    ```lua
+    return {
+      {
+        "nvim-telescope/telescope.nvim",
+        opts = {
+          defaults = {
+            layout_strategy = "horizontal",
+            layout_config = { prompt_position = "top" },
+            sorting_strategy = "ascending",
+          },
+        },
+      },
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Disable a Plugin">
+    ```lua
+    return {
+      { "folke/trouble.nvim", enabled = false },
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Add Dependencies">
+    ```lua
+    return {
+      {
+        "hrsh7th/nvim-cmp",
+        dependencies = { "hrsh7th/cmp-emoji" },
+        opts = function(_, opts)
+          table.insert(opts.sources, { name = "emoji" })
+        end,
+      },
+    }
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Check `nvim/lua/plugins/example.lua:1` for many more examples of customizing plugins!
+</Tip>
+
+## Customizing Keybindings
+
+### Neovim Keymaps
+
+Keymaps are configured in `nvim/lua/config/keymaps.lua:1`. LazyVim provides many default keybindings.
+
+<Steps>
+  <Step title="Open keymaps configuration">
+    Edit `nvim/lua/config/keymaps.lua:1`:
+    
+    ```lua
+    -- Keymaps are automatically loaded on the VeryLazy event
+    -- Default keymaps: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+    -- Add any additional keymaps here
+    ```
+  </Step>
+  
+  <Step title="Add custom keybindings">
+    Add your custom keymaps below the comments:
+    
+    ```lua
+    local map = vim.keymap.set
+    
+    -- Save with Ctrl+S
+    map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+    
+    -- Better window navigation
+    map("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+    map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+    map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+    map("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+    
+    -- Quick quit
+    map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
+    
+    -- Buffer navigation
+    map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+    map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+    ```
+  </Step>
+  
+  <Step title="Save and reload">
+    Save the file and restart Neovim to apply changes. Or source the file:
+    
+    ```vim
+    :source ~/.config/nvim/lua/config/keymaps.lua
+    ```
+  </Step>
+</Steps>
+
+### Keymap Modes
+
+Vim has different modes, each can have different keybindings:
+
+- `"n"` - Normal mode
+- `"i"` - Insert mode
+- `"v"` - Visual mode
+- `"x"` - Visual block mode
+- `"t"` - Terminal mode
+- `"c"` - Command mode
+
+You can specify multiple modes:
+
+```lua
+map({ "n", "v" }, "<leader>y", '"+y', { desc = "Copy to system clipboard" })
+```
+
+### LazyVim Leader Key
+
+The leader key is `Space` by default. Common LazyVim leader bindings:
+
+- `<leader>ff` - Find files
+- `<leader>sg` - Search by grep
+- `<leader>e` - Toggle file explorer
+- `<leader>gg` - Open lazygit
+- `<leader>qq` - Quit all
+
+<Note>
+  View all keybindings by pressing `<leader>?` in Neovim or run `:Telescope keymaps`
+</Note>
+
+### Plugin-specific Keybindings
+
+You can add keybindings when defining plugins:
+
+```lua
+return {
+  "telescope.nvim",
+  keys = {
+    {
+      "<leader>fp",
+      function()
+        require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
+      end,
+      desc = "Find Plugin File",
+    },
+  },
+}
+```
+
+### Tmux Keybindings
+
+Tmux uses `Ctrl+Space` as the prefix key (`tmux/tmux.conf:11`).
+
+<Tabs>
+  <Tab title="Current Tmux Prefix">
+    From `tmux/tmux.conf:9`:
+    
+    ```bash
+    # Remap prefix from 'C-b' to 'C-Space'
+    unbind C-b
+    set -g prefix C-Space
+    bind C-Space send-prefix
+    ```
+  </Tab>
+  
+  <Tab title="Common Tmux Bindings">
+    After pressing `Ctrl+Space`:
+    
+    - `c` - Create new window
+    - `[` - Enter copy mode
+    - `%` - Split vertically
+    - `"` - Split horizontally
+    - `n` - Next window
+    - `p` - Previous window
+    - `d` - Detach from session
+  </Tab>
+  
+  <Tab title="Vi Copy Mode">
+    From `tmux/tmux.conf:22`:
+    
+    ```bash
+    # Vim-like navigation in copy mode
+    bind-key -T copy-mode-vi 'v' send -X begin-selection
+    bind-key -T copy-mode-vi 'y' send -X copy-selection
+    bind-key -T copy-mode-vi 'V' send -X rectangle-toggle
+    ```
+    
+    Press `Ctrl+Space` then `[` to enter copy mode, then:
+    - `v` - Start selection
+    - `y` - Copy selection
+    - `V` - Rectangle selection
+  </Tab>
+</Tabs>
+
+### Changing Tmux Prefix
+
+To change the Tmux prefix key, edit `tmux/tmux.conf:11`:
+
+```bash
+# Use Ctrl+A instead of Ctrl+Space
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+```
+
+Reload: `tmux source-file ~/.config/tmux/tmux.conf`
+
+## Neovim Options
+
+Customize Neovim behavior in `nvim/lua/config/options.lua:1`.
+
+### Current Custom Options
+
+From `nvim/lua/config/options.lua:5`:
+
+```lua
+vim.g.root_spec = { "cwd" }  -- Use current directory as root
+```
+
+### Common Options to Customize
+
+Add these to `nvim/lua/config/options.lua:1`:
+
+```lua
+local opt = vim.opt
+
+-- Line numbers
+opt.relativenumber = true  -- Relative line numbers
+opt.number = true          -- Show current line number
+
+-- Tabs and indentation
+opt.tabstop = 4           -- 4 spaces for tabs
+opt.shiftwidth = 4        -- 4 spaces for indent width
+opt.expandtab = true      -- Expand tab to spaces
+opt.autoindent = true     -- Copy indent from current line
+
+-- Search settings
+opt.ignorecase = true     -- Ignore case when searching
+opt.smartcase = true      -- Override ignorecase if search has uppercase
+
+-- Appearance
+opt.termguicolors = true  -- Enable 24-bit RGB colors
+opt.cursorline = true     -- Highlight current line
+opt.signcolumn = "yes"    -- Always show sign column
+
+-- Behavior
+opt.clipboard = "unnamedplus"  -- Use system clipboard
+opt.mouse = "a"                -- Enable mouse support
+opt.undofile = true            -- Enable persistent undo
+opt.scrolloff = 8              -- Keep 8 lines visible above/below cursor
+```
+
+<Tip>
+  LazyVim sets many good defaults. Check [LazyVim options](https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua) before overriding.
+</Tip>
+
+## Alacritty Customization
+
+### Window Settings
+
+From `alacritty/alacritty.toml:7`:
+
+```toml
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"  # Remove window buttons on macOS
+opacity = 0.8               # 80% opacity
+blur = true                 # Background blur
+startup_mode = "Maximized"  # Start maximized
+```
+
+<Tabs>
+  <Tab title="Window Opacity">
+    Adjust transparency:
+    
+    ```toml
+    [window]
+    opacity = 1.0    # Fully opaque
+    opacity = 0.9    # Slightly transparent
+    opacity = 0.7    # More transparent
+    blur = true      # Blur background (macOS/Linux)
+    ```
+  </Tab>
+  
+  <Tab title="Window Decorations">
+    macOS options:
+    
+    ```toml
+    decorations = "Full"        # Standard window
+    decorations = "None"        # No title bar
+    decorations = "Transparent" # Transparent title bar
+    decorations = "Buttonless"  # No buttons (current)
+    ```
+  </Tab>
+  
+  <Tab title="Startup Mode">
+    ```toml
+    startup_mode = "Windowed"    # Normal window
+    startup_mode = "Maximized"   # Maximized (current)
+    startup_mode = "Fullscreen"  # Fullscreen
+    ```
+  </Tab>
+  
+  <Tab title="Padding">
+    ```toml
+    [window]
+    padding.x = 0   # No horizontal padding
+    padding.y = 0   # No vertical padding
+    
+    # Or
+    padding.x = 15  # More breathing room
+    padding.y = 15
+    ```
+  </Tab>
+</Tabs>
+
+### Terminal Settings
+
+From `alacritty/alacritty.toml:4`:
+
+```toml
+[env]
+TERM = "xterm-256color"
+```
+
+This ensures proper color support in terminal applications.
+
+<Note>
+  The `TERM` environment variable is crucial for color and feature support in terminal programs.
+</Note>
+
+## Autocommands
+
+Autocommands run automatically on specific events. Configure in `nvim/lua/config/autocmds.lua:1`.
+
+Example autocommands to add:
+
+```lua
+local autocmd = vim.api.nvim_create_autocmd
+
+-- Highlight on yank
+autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
+  end,
+})
+
+-- Remove trailing whitespace on save
+autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    local save_cursor = vim.fn.getpos(".")
+    vim.cmd([[%s/\s\+$//e]])
+    vim.fn.setpos(".", save_cursor)
+  end,
+})
+
+-- Auto-format on save
+autocmd("BufWritePre", {
+  pattern = { "*.lua", "*.js", "*.ts", "*.jsx", "*.tsx" },
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end,
+})
+
+-- Set specific filetype settings
+autocmd("FileType", {
+  pattern = { "python" },
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+  end,
+})
+```
+
+## Quick Personalization Checklist
+
+<Steps>
+  <Step title="Set your preferred theme">
+    Choose and configure themes for Neovim, Alacritty, and Tmux
+  </Step>
+  
+  <Step title="Configure your font">
+    Install a Nerd Font and set it in Alacritty with your preferred size
+  </Step>
+  
+  <Step title="Add essential plugins">
+    Create plugin files in `nvim/lua/plugins/` for tools you need
+  </Step>
+  
+  <Step title="Set up keybindings">
+    Add custom keymaps in `nvim/lua/config/keymaps.lua:1`
+  </Step>
+  
+  <Step title="Adjust Neovim options">
+    Configure behavior in `nvim/lua/config/options.lua:1`
+  </Step>
+  
+  <Step title="Customize Alacritty">
+    Set window opacity, padding, and startup mode in `alacritty/alacritty.toml:7`
+  </Step>
+  
+  <Step title="Update Obsidian path (if using)">
+    Change the workspace path in `nvim/lua/plugins/obsidian.lua:14` to your vault location
+  </Step>
+</Steps>
+
+<Tip>
+  Make changes incrementally! Try one customization at a time so you can easily identify issues.
+</Tip>
+
+## Resources
+
+- [LazyVim Documentation](https://www.lazyvim.org/) - Official LazyVim docs
+- [Lazy.nvim](https://github.com/folke/lazy.nvim) - Plugin manager docs
+- [Alacritty Configuration](https://alacritty.org/config-alacritty.html) - Official config guide
+- [Tmux Configuration](https://github.com/tmux/tmux/wiki) - Tmux wiki
+- [Nerd Fonts](https://www.nerdfonts.com/) - Icon font downloads
+- [Awesome Neovim](https://github.com/rockerBOO/awesome-neovim) - Curated list of Neovim plugins

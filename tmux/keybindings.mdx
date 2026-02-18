@@ -1,0 +1,286 @@
+---
+title: "Tmux Keybindings"
+description: "Custom keybindings and shortcuts for navigation, copy mode, and window management"
+---
+
+## Prefix Key
+
+<Warning>
+**Important**: The prefix key has been changed from the default `C-b` to `C-Space`.
+</Warning>
+
+```bash
+unbind C-b
+set -g prefix C-Space
+bind C-Space send-prefix
+```
+
+All keybindings below assume you press `C-Space` (Ctrl+Space) as the prefix, unless otherwise noted.
+
+## Copy Mode
+
+### Entering Copy Mode
+
+```bash
+bind-key [ copy-mode
+```
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + [` | Enter copy mode |
+| `q` | Exit copy mode |
+
+<Tip>
+Once in copy mode, you can scroll through terminal history using Vim-style keys.
+</Tip>
+
+### Vim-Style Navigation
+
+With `set-window-option -g mode-keys vi` enabled, copy mode uses Vim keybindings:
+
+#### Movement Keys
+
+| Key | Action |
+|-----|--------|
+| `h` | Move cursor left |
+| `j` | Move cursor down |
+| `k` | Move cursor up |
+| `l` | Move cursor right |
+| `w` | Move forward one word |
+| `b` | Move backward one word |
+| `0` | Move to start of line |
+| `$` | Move to end of line |
+| `g` | Go to top of history |
+| `G` | Go to bottom of history |
+| `C-u` | Page up |
+| `C-d` | Page down |
+| `/` | Search forward |
+| `?` | Search backward |
+| `n` | Next search result |
+| `N` | Previous search result |
+
+### Copy Mode Custom Keybindings
+
+```bash
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'y' send -X copy-selection
+bind-key -T copy-mode-vi 'V' send -X rectangle-toggle
+```
+
+| Keybinding | Action | Description |
+|------------|--------|-------------|
+| `v` | Begin selection | Start visual selection (like Vim) |
+| `y` | Copy selection | Yank selected text to Tmux buffer |
+| `V` | Rectangle toggle | Switch to rectangular selection mode |
+
+## Copy Mode Workflow
+
+<Steps>
+  <Step title="Enter Copy Mode">
+    Press `C-Space + [`
+  </Step>
+  
+  <Step title="Navigate to Text">
+    Use Vim keys (`h`, `j`, `k`, `l`) or search (`/`) to find the text you want to copy
+  </Step>
+  
+  <Step title="Start Selection">
+    Press `v` to begin visual selection
+  </Step>
+  
+  <Step title="Select Text">
+    Move cursor to extend selection (use Vim motion keys)
+  </Step>
+  
+  <Step title="Copy Text">
+    Press `y` to copy the selected text to Tmux buffer
+  </Step>
+  
+  <Step title="Paste Text">
+    Press `C-Space + ]` to paste (default Tmux binding)
+  </Step>
+</Steps>
+
+## Selection Modes
+
+<AccordionGroup>
+  <Accordion title="Character-wise Selection (v)">
+    Default selection mode, works like Vim's visual mode:
+    
+    ```
+    1. Press 'v' to start
+    2. Move cursor to select characters
+    3. Press 'y' to copy
+    ```
+    
+    **Use for**: Selecting words, sentences, or continuous text
+  </Accordion>
+  
+  <Accordion title="Rectangle Selection (V)">
+    Select a rectangular block of text:
+    
+    ```
+    1. Press 'v' to start selection
+    2. Press 'V' to toggle rectangle mode
+    3. Move cursor to create rectangle
+    4. Press 'y' to copy
+    ```
+    
+    **Use for**: Copying columns of text, code alignment, or structured data
+  </Accordion>
+</AccordionGroup>
+
+## Mouse Support
+
+```bash
+set -g mouse on
+```
+
+With mouse support enabled:
+
+| Action | Description |
+|--------|-------------|
+| Click and drag | Select text (automatically copies on release) |
+| Double click | Select word |
+| Triple click | Select line |
+| Scroll wheel | Scroll through history (enters copy mode automatically) |
+| Click pane border | Select pane |
+| Drag pane border | Resize pane |
+| Click window name | Switch to window |
+
+<Note>
+To use terminal's native text selection (bypassing Tmux), hold `Shift` while selecting.
+</Note>
+
+## Default Tmux Keybindings
+
+These standard Tmux keybindings still work with the `C-Space` prefix:
+
+### Window Management
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + c` | Create new window |
+| `prefix + ,` | Rename current window |
+| `prefix + &` | Kill current window |
+| `prefix + n` | Next window |
+| `prefix + p` | Previous window |
+| `prefix + 0-9` | Switch to window by number |
+| `prefix + w` | List all windows |
+
+### Pane Management
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + %` | Split pane vertically |
+| `prefix + "` | Split pane horizontally |
+| `prefix + x` | Kill current pane |
+| `prefix + arrow key` | Navigate between panes |
+| `prefix + {` | Move pane left |
+| `prefix + }` | Move pane right |
+| `prefix + z` | Toggle pane zoom |
+| `prefix + space` | Cycle through pane layouts |
+
+### Session Management
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + d` | Detach from session |
+| `prefix + s` | List sessions |
+| `prefix + $` | Rename session |
+| `prefix + (` | Previous session |
+| `prefix + )` | Next session |
+
+### Miscellaneous
+
+| Keybinding | Action |
+|------------|--------|
+| `prefix + ?` | List all keybindings |
+| `prefix + :` | Enter command mode |
+| `prefix + t` | Show time |
+| `prefix + ]` | Paste from Tmux buffer |
+
+## Quick Reference Card
+
+<CardGroup cols={2}>
+  <Card title="Prefix Key" icon="keyboard">
+    `C-Space` (Ctrl+Space)
+  </Card>
+  <Card title="Enter Copy Mode" icon="copy">
+    `C-Space + [`
+  </Card>
+  <Card title="Begin Selection" icon="highlighter">
+    `v` (in copy mode)
+  </Card>
+  <Card title="Copy Selection" icon="clipboard">
+    `y` (in copy mode)
+  </Card>
+</CardGroup>
+
+## Customizing Keybindings
+
+To add your own keybindings, add them to `~/.tmux.conf`:
+
+```bash
+# Example: Bind prefix+r to reload config
+bind r source-file ~/.tmux.conf \; display "Config reloaded!"
+
+# Example: Bind prefix+| for vertical split
+bind | split-window -h
+
+# Example: Bind prefix+- for horizontal split
+bind - split-window -v
+```
+
+After adding keybindings, reload the configuration:
+
+```bash
+tmux source ~/.tmux.conf
+```
+
+## Tips for Vim Users
+
+<Tip>
+**Muscle Memory**: The copy mode keybindings are designed to feel natural if you're already familiar with Vim. The same motion keys work for navigation and text selection.
+</Tip>
+
+### Common Vim Patterns
+
+- `v + $ + y`: Select to end of line and copy
+- `v + gg + y`: Select to top of buffer and copy
+- `/ + <term> + n + v + y`: Search, find next, select, copy
+- `V + j + j + y`: Rectangle select three lines and copy
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Keybindings not working">
+    Ensure you're using the correct prefix key (`C-Space`, not `C-b`):
+    
+    ```bash
+    # Check current prefix
+    tmux show-options -g prefix
+    ```
+  </Accordion>
+  
+  <Accordion title="Copy mode doesn't use Vim keys">
+    Verify Vi mode is enabled:
+    
+    ```bash
+    # Check mode-keys setting
+    tmux show-window-options -g mode-keys
+    ```
+    
+    Should return: `mode-keys vi`
+  </Accordion>
+  
+  <Accordion title="Mouse selection not working">
+    Check if mouse mode is enabled:
+    
+    ```bash
+    tmux show-options -g mouse
+    ```
+    
+    Should return: `mouse on`
+  </Accordion>
+</AccordionGroup>
