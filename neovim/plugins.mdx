@@ -135,7 +135,7 @@ return {
     workspaces = {
       {
         name = "personal",
-        path = "/Users/leylandyang/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sharedvault",
+        path = "~/path/to/your/obsidian/vault",
       },
     },
     completion = {
@@ -154,11 +154,15 @@ return {
 ```
 
 <Accordion title="Configuration Details">
-- **Workspace**: Syncs with iCloud Obsidian vault
+- **Workspace**: Configure the `path` to point to your own Obsidian vault location
 - **Completion**: Integrated with nvim-cmp for note linking
 - **Daily Notes**: Automatic date formatting and tagging
 - **Lazy Loading**: Only loads for markdown files
 </Accordion>
+
+<Note>
+  Update the `path` field in your configuration to match your Obsidian vault location. The path can be an absolute path or use `~` for your home directory.
+</Note>
 
 ---
 
